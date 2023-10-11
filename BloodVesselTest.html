@@ -1,0 +1,256 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Blood Vessel Generation Demo</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+	var config = {
+		type: Phaser.AUTO,
+		width: 612,
+		height: 612,
+		physics: {
+			default: 'arcade',
+			arcade: {
+				gravity: { y: 300 },
+				debug: false
+			}
+		},
+		scene: {
+			preload: preload,
+			create: create,
+			update: update
+		}
+	};
+	
+	//GLOBALS
+	
+	var w = config.width; 				//integer, width of screen
+	var h = config.height; 				//integer, height of screen
+	var standardOffset = 30;			//offset of vessel end points from the edge of the screen
+	var endPointSize = 15 				//size of endpoint circles
+	var endPointTrueColour = 0x000000; 	//colour of true endpoints (2 of which connect the target blood vessel)
+	var endPointFalseColour = 0xffffff; //colour of fake endpoints 
+	var vesselColour = 0xdb65b4;		//colour of blood vessels
+	var vesselThickness = 3; 			//thickness of blood vessels
+	
+	var game = new Phaser.Game(config);
+	
+	//CLASS DEFINITIONS
+	
+		//Point of confusion: I'm not sure why modifiers on class members like public, private, or types like var, int, cause crashing, Phaser quirk? Only runs if I leave them blank.
+		//Point of confusion: Constructors don't appear to be able to set member variables, but calling other member functions can. Phaser quirk? Doesn't work like the other Java I've practiced with.
+		//Point of confusion: Even when I'm allowed to specify types, Phaser doesn't seem to a int? 
+	
+	class levelParams
+	{
+		
+		/* This class is used to store the parameters which characterize a game level. Instances will be fed into 
+		member functions of the level generator class (when that's implemented) to tell it what it needs to
+		generate. */
+		
+		difficulty = 1;				//governs how many blood vessels are placed
+		levelType = "FULL"; 		//unused for now, will govern whether the level has restricted FOV and the mosaicing effect.
+		
+		SetParams(d) 				//I would set this through a constructor instead, but for whatever reason it doesn't work, I have to create a default levelParams and then call this.
+		{
+									
+			
+			this.difficulty = d;
+		}
+
+	}
+	
+	class vesselCoordinates
+	{
+
+		//Coordinates of endpoint 1
+		p1X = 0; 
+		p1Y = 0;
+		//Coordinates of endpoint 2
+		p2X = 0;
+		p2Y = 0;
+		
+		vesselCoordinates(a,b,c,d) 
+		{
+			
+		//Known issue: this constructor doesn't actually work for the time being. Use SetCoordinates after creating instance or coords will always be default.
+		
+		this.p1X = a;
+		this.p1Y = b;
+		this.p2X = c;
+		this.p2Y = d;
+			
+		}
+		
+		SetCoordinates(a,b,c,d)
+		{
+			
+		//Sets coordinates for the blood vessel's endpoints. 
+		
+		this.p1X = a;
+		this.p1Y = b;	
+		this.p2X = c;
+		this.p2Y = d;
+		
+		}
+		
+			
+	}
+
+	class pointGenerator // This class's purpose is to generate a pair of points within a specified screen boundary. 
+	{
+
+		
+		//below members define the area the generator draws points within. Screen size with offset buffer by default.
+		
+		boundaryX1 = standardOffset;
+		boundaryX2 = w - standardOffset;
+		boundaryY1 = standardOffset;
+		boundaryY2 = h - standardOffset;
+		
+		pointGenerator(a,b,c,d,o)
+		{
+		//constructor, allows assignment of boundary variables. Doesn't work, like all constructors in this program.
+			
+			this.boundaryX1 = a;
+			this.boundaryX2 = b;
+			this.boundaryY1 = c;
+			this.boundaryY2 = d;
+		}
+		
+		GeneratePoints()
+		{
+			
+			//randomly generates two endpoints for a vessel and returns their coordinates as a VesselCoordinates object instance
+			
+			var coords = new vesselCoordinates();
+			
+			var whichEdge = Phaser.Math.Between(1,2);	//Flips a coin to determine whether the vessel is generated spanning top and bottom, or left and right
+			
+			switch(whichEdge)
+			{
+				case 1: //Top and bottom
+
+				
+				coords.SetCoordinates(
+				Phaser.Math.Between(this.boundaryX1,this.boundaryX2), 			//X1
+				this.boundaryY1, 												//Y1
+				Phaser.Math.Between(this.boundaryX1,this.boundaryX2), 			//X2
+				this.boundaryY2													//Y2
+				);
+				
+				
+				break;
+				
+				case 2: //Left and right
+
+				
+				coords.SetCoordinates( 											
+				this.boundaryX1,												//X1
+				Phaser.Math.Between(this.boundaryY1,this.boundaryY2),			//Y1
+				this.boundaryX2,												//X2
+				Phaser.Math.Between(this.boundaryY1,this.boundaryY2)			//Y2
+				);
+				
+				break;
+				
+				default:
+				
+				coords.SetCoordinates(0,0,0,0);
+				
+				break;
+
+			}
+			
+			return coords; 
+			
+		}
+	}
+	
+	function DrawVessel(scene,target)
+	{
+		
+		//Draws a blood vessel onto the target scene, between points created by a pointGenerator.
+		//returns the endpoint coordinates of the line it just generated.
+		
+		var endCol1 = endPointFalseColour; 		// colour of first point placed
+		var endCol2 = endPointFalseColour; 		// colour of second point placed
+		
+		if (target)								// ensures the target vessel has 2 "true" ends.
+		{
+			endCol1 = endPointTrueColour;
+			endCol2 = endPointTrueColour;
+		}
+			
+		else
+		{
+			if (Phaser.Math.Between(1,3) == 3) 	//1 in 3 chance of decoy vessel having one "true" end 
+			{
+				endCol1 = endPointTrueColour;
+			}
+		}
+			
+		generator = new pointGenerator();
+		pointCoordinates = generator.GeneratePoints(); 
+
+		scene.add.line(0,0,pointCoordinates.p1X,pointCoordinates.p1Y,pointCoordinates.p2X,pointCoordinates.p2Y,vesselColour).setOrigin(0,0).setLineWidth(vesselThickness);
+		scene.add.circle(pointCoordinates.p1X,pointCoordinates.p1Y, endPointSize, endCol1, 1);
+		scene.add.circle(pointCoordinates.p2X,pointCoordinates.p2Y, endPointSize, endCol2, 1);
+			
+		return pointCoordinates;
+		
+	}
+
+	function preload()
+	{
+		defaultScene = this;
+
+		this.load.image('blood', 'assets/blood.jpg');
+
+	}
+
+	function create ()
+	{
+		//PERMANENT GRAPHICS
+		//Shouldn't be deleted when the scene is cleared.
+		this.add.image(w/2, h/2, 'blood');
+		
+		//TESTING BLOCK
+		//For now, this section is used to test generation.
+		
+		var testParams = new levelParams();
+		testParams.SetParams(Phaser.Math.Between(1,5),"FULL");
+		
+		this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		
+
+		for (var i = 0;i < testParams.difficulty;i++)
+		{
+			var targetVessel = (i == testParams.difficulty - 1) ? (true) : (false); //If this is the last vessel to be placed, tells PlaceVessel that it needs to be real
+		
+			var newPoints = DrawVessel(this,targetVessel);
+			
+
+		}
+	}
+
+	function update ()
+	{
+	}
+	
+
+
+</script>
+
+</body>
+</html>
