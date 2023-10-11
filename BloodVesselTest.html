@@ -38,9 +38,9 @@
 	var h = config.height; 				//integer, height of screen
 	var standardOffset = 30;			//offset of vessel end points from the edge of the screen
 	var endPointSize = 15 				//size of endpoint circles
-	var endPointTrueColour = 0x000000; 	//colour of true endpoints (2 of which connect the target blood vessel)
-	var endPointFalseColour = 0xffffff; //colour of fake endpoints 
-	var vesselColour = 0xdb65b4;		//colour of blood vessels
+	var endPointTrueColour = 0x000000; 		//colour of true endpoints (2 of which connect the target blood vessel)
+	var endPointFalseColour = 0xffffff; 		//colour of fake endpoints 
+	var vesselColour = 0xdb65b4;			//colour of blood vessels
 	var vesselThickness = 3; 			//thickness of blood vessels
 	
 	var game = new Phaser.Game(config);
@@ -59,7 +59,7 @@
 		generate. */
 		
 		difficulty = 1;				//governs how many blood vessels are placed
-		levelType = "FULL"; 		//unused for now, will govern whether the level has restricted FOV and the mosaicing effect.
+		levelType = "FULL"; 			//unused for now, will govern whether the level has restricted FOV and the mosaicing effect.
 		
 		SetParams(d) 				//I would set this through a constructor instead, but for whatever reason it doesn't work, I have to create a default levelParams and then call this.
 		{
@@ -144,9 +144,9 @@
 				
 				coords.SetCoordinates(
 				Phaser.Math.Between(this.boundaryX1,this.boundaryX2), 			//X1
-				this.boundaryY1, 												//Y1
+				this.boundaryY1, 							//Y1
 				Phaser.Math.Between(this.boundaryX1,this.boundaryX2), 			//X2
-				this.boundaryY2													//Y2
+				this.boundaryY2								//Y2
 				);
 				
 				
@@ -156,9 +156,9 @@
 
 				
 				coords.SetCoordinates( 											
-				this.boundaryX1,												//X1
+				this.boundaryX1,							//X1
 				Phaser.Math.Between(this.boundaryY1,this.boundaryY2),			//Y1
-				this.boundaryX2,												//X2
+				this.boundaryX2,							//X2
 				Phaser.Math.Between(this.boundaryY1,this.boundaryY2)			//Y2
 				);
 				
@@ -186,7 +186,7 @@
 		var endCol1 = endPointFalseColour; 		// colour of first point placed
 		var endCol2 = endPointFalseColour; 		// colour of second point placed
 		
-		if (target)								// ensures the target vessel has 2 "true" ends.
+		if (target)					// ensures the target vessel has 2 "true" ends.
 		{
 			endCol1 = endPointTrueColour;
 			endCol2 = endPointTrueColour;
