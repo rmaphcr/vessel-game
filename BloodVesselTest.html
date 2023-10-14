@@ -36,11 +36,14 @@
 	
 	var w = config.width; 				//integer, width of screen
 	var h = config.height; 				//integer, height of screen
+	
 	var standardOffset = 30;			//offset of vessel end points from the edge of the screen
 	var endPointSize = 15 				//size of endpoint circles
 	var endPointTrueColour = 0x000000; 		//colour of true endpoints (2 of which connect the target blood vessel)
 	var endPointFalseColour = 0xffffff; 		//colour of fake endpoints 
-	var vesselColour = 0xdb65b4;			//colour of blood vessels
+	var midPointDisturbance = 100;		//range of disturbance for vessel midpoints
+	var splinePoints = 5;				//number of points to draw between endpoints for spline connection
+	var vesselColour = 0x87a7b0;			//colour of blood vessel lines
 	var vesselThickness = 3; 			//thickness of blood vessels
 	
 	var game = new Phaser.Game(config);
@@ -68,25 +71,37 @@
 
 	}
 	
+	class point
+	
+	{
+		x = 0;
+		y = 0;
+		
+		SetCoordinates(newX,newY)
+		{
+			this.x = newX;
+			this.y = newY;
+		}
+	}
+	
 	class vesselCoordinates
+	
 	{
 
-		//Coordinates of endpoint 1
-		p1X = 0; 
-		p1Y = 0;
-		//Coordinates of endpoint 2
-		p2X = 0;
-		p2Y = 0;
+		//Point 1
+		point1 = new point;
+		//Point 2
+		point2 = new point;
 		
 		vesselCoordinates(a,b,c,d) 
 		{
 			
 		//Known issue: this constructor doesn't actually work for the time being. Use SetCoordinates after creating instance or coords will always be default.
 		
-		this.p1X = a;
-		this.p1Y = b;
-		this.p2X = c;
-		this.p2Y = d;
+		this.point1.x = a;
+		this.point1.y = b;
+		this.point2.x = c;
+		this.point2.y = d;
 			
 		}
 		
@@ -95,14 +110,103 @@
 			
 		//Sets coordinates for the blood vessel's endpoints. 
 		
-		this.p1X = a;
-		this.p1Y = b;	
-		this.p2X = c;
-		this.p2Y = d;
+		this.point1.x = a;
+		this.point1.y = b;	
+		this.point2.x = c;
+		this.point2.y = d;
 		
 		}
 		
 			
+	}
+	
+	class bloodVessel
+	
+	{
+		endPoints = [];
+		midPoints = [];
+		endCol1 = 0x000000;
+		endCol2 = 0x000000;
+		
+		setEndPoints(newEnds)
+		
+		{
+			this.endPoints = newEnds;
+		}
+		
+		setMidPoints(newMids)
+		{
+			this.midPoints = newMids;
+		}
+		
+		setEndCol1(newCol)
+		{
+			this.endCol1 = newCol;
+		}
+		
+		setEndCol2(newCol)
+		{
+			this.endCol2 = newCol;
+		}
+		
+		disturbMidPoints(maximum)
+		{
+			for (var i = 0;i<midPoints.length;i++)
+			{
+				midPoints[i].x += Phaser.Math.Between(-maximum,maximum);
+				midPoints[i].y += Phaser.Math.Between(-maximum,maximum);
+				
+				if (Math.abs(midPoints[i].x) >= w)
+					{
+						if (midPoints[i].x > 0)
+						{
+							midPoints[i].x -= w;
+						}
+						
+						else
+						{
+							midPoints[i].x += w;
+						}
+					}
+			}
+		}
+		
+		drawLines(scene,graphics)
+		{
+			
+			scene.add.circle(endPoints.point1.x,endPoints.point1.y, endPointSize, this.endCol1, 1);
+			scene.add.circle(endPoints.point2.x,endPoints.point2.y, endPointSize, this.endCol2, 1); 
+			
+			for (var i = 0;i<midPoints.length;i++) 
+			{
+				scene.add.circle(midPoints[i].x,midPoints[i].y,vesselThickness * 2,vesselColour,1);
+				console.log("Drew Midpoint At " + midPoints[i].x  + "," +  midPoints[i].y);
+			}
+			
+			var splinePoints = [];
+			
+			for (var i = 0;i<midPoints.length;i++)
+			{
+				splinePoints.push(midPoints[i].x);
+				splinePoints.push(midPoints[i].y);
+			}
+			
+			splinePoints.unshift(endPoints.point1.y);
+			splinePoints.unshift(endPoints.point1.x);
+			
+			splinePoints.push(endPoints.point2.x);
+			splinePoints.push(endPoints.point2.y);
+			
+			console.log(splinePoints);
+			
+			let splineX = (splinePoints[0] + splinePoints[splinePoints.length-2])/2;
+			let splineY = (splinePoints[1] + splinePoints[splinePoints.length-1])/2;
+			console.log("Spline center:" + splineX + "," + splineY);
+			const splineCurve = new Phaser.Curves.Spline(splinePoints);
+			let splineObject = scene.add.curve(splineX,splineY,splineCurve);
+			
+			splineCurve.draw(graphics);
+		}
 	}
 
 	class pointGenerator // This class's purpose is to generate a pair of points within a specified screen boundary. 
@@ -126,7 +230,7 @@
 			this.boundaryY2 = d;
 		}
 		
-		GeneratePoints()
+		GenerateEndPoints()
 		{
 			
 			//randomly generates two endpoints for a vessel and returns their coordinates as a VesselCoordinates object instance
@@ -173,13 +277,55 @@
 			return coords; 
 			
 		}
+		
+		GenerateMidPoints(coords)
+		{
+			//Given a vesselCoordinates, returns an array of n evenly spaced points between the endpoints.
+			var pointArray = [];
+			
+			var newX = 0;
+			var newY = 0;
+			
+			console.log("GENERATING VESSEL MIDPOINTS");
+
+			for (var i = 1;2*i <= splinePoints * 2;i++)
+			{
+			
+				console.log("LOOP CONTINUES");
+				
+				var stepX = Math.abs(coords.point2.x-coords.point1.x)/(splinePoints+1);
+				var stepY = Math.abs(coords.point2.y-coords.point1.y)/(splinePoints+1);
+				
+				if (coords.point1.x > coords.point2.x)
+				{
+					stepX *= -1;
+				}
+				
+				if (coords.point1.y > coords.point2.y)
+				{
+					stepY *= -1;
+				}
+			
+				newX = coords.point1.x + (i*stepX); 
+				newY = coords.point1.y + (i*stepY);
+				var newPoint = new point();
+				newPoint.SetCoordinates(newX,newY);
+				
+				pointArray.push(newPoint);
+				
+			} 
+			
+			
+			return pointArray;
+			
+		}
 	}
 	
-	function DrawVessel(scene,target)
+	function GenerateVessel(target)
 	{
 		
-		//Draws a blood vessel onto the target scene, between points created by a pointGenerator.
-		//returns the endpoint coordinates of the line it just generated.
+		//Creates a blood vessel for the target scene, between points created by a pointGenerator.
+		//returns the blood vessel object.
 		
 		var endCol1 = endPointFalseColour; 		// colour of first point placed
 		var endCol2 = endPointFalseColour; 		// colour of second point placed
@@ -199,13 +345,20 @@
 		}
 			
 		generator = new pointGenerator();
-		pointCoordinates = generator.GeneratePoints(); 
+		endPoints = generator.GenerateEndPoints(); //array containing the end points
+		midPoints = generator.GenerateMidPoints(endPoints); //array containing the mid points
 
-		scene.add.line(0,0,pointCoordinates.p1X,pointCoordinates.p1Y,pointCoordinates.p2X,pointCoordinates.p2Y,vesselColour).setOrigin(0,0).setLineWidth(vesselThickness);
-		scene.add.circle(pointCoordinates.p1X,pointCoordinates.p1Y, endPointSize, endCol1, 1);
-		scene.add.circle(pointCoordinates.p2X,pointCoordinates.p2Y, endPointSize, endCol2, 1);
+
+		newVessel = new bloodVessel;
+		newVessel.setEndPoints(endPoints);
+		newVessel.setMidPoints(midPoints);
+		newVessel.endCol1 = endCol1;
+		newVessel.endCol2 = endCol2;
+		newVessel.disturbMidPoints(midPointDisturbance);
 			
-		return pointCoordinates;
+		//works up until  here, midPoints seems to become undefined afterwards
+			
+		return newVessel;
 		
 	}
 
@@ -223,6 +376,11 @@
 		//Shouldn't be deleted when the scene is cleared.
 		this.add.image(w/2, h/2, 'blood');
 		
+		//VESSEL GRAPHICS
+		let vesselGraphics = this.add.graphics(w/2,h/2);
+		vesselGraphics.lineStyle(5, vesselColour, 1.0);
+		vesselGraphics.fillStyle(vesselColour, 1.0);
+		
 		//TESTING BLOCK
 		//For now, this section is used to test generation.
 		
@@ -236,10 +394,13 @@
 		{
 			var targetVessel = (i == testParams.difficulty - 1) ? (true) : (false); //If this is the last vessel to be placed, tells PlaceVessel that it needs to be real
 		
-			var newPoints = DrawVessel(this,targetVessel);
+			var newVessel = GenerateVessel(targetVessel);
 			
+			newVessel.drawLines(this,vesselGraphics);
 
 		}
+		
+		
 	}
 
 	function update ()
