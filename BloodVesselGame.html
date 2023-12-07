@@ -1,0 +1,103 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Blood Vessel Generation Demo</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+	var config = {
+		type: Phaser.AUTO,
+		width: 612,
+		height: 612,
+		physics: {
+			default: 'arcade',
+			arcade: {
+				gravity: { y: 300 },
+				debug: false
+			}
+		},
+		scene: {
+			preload: preload,
+			create: create,
+			update: update
+		}
+	};
+	
+	var game = new Phaser.Game(config);
+
+	function preload()
+	{
+		defaultScene = this;
+		
+		//loading permanent graphics assets
+		this.load.image('blood', 'assets/images/blood.jpg');
+		
+		//loading global variables
+		this.load.script('s_globals','assets/scripts/Globals.js');
+		//loading classes
+		this.load.script('s_LevelParams','assets/scripts/LevelParams.js');
+		this.load.script('s_Point','assets/scripts/Point.js');
+		this.load.script('s_VesselCoordinates','assets/scripts/VesselCoordinates.js');
+		this.load.script('s_BloodVessel','assets/scripts/BloodVessel.js');
+		this.load.script('s_PointGenerator','assets/scripts/PointGenerator.js');
+		this.load.script('s_VesselGenerator','assets/scripts/VesselGenerator.js');
+
+	}
+
+	function create ()
+	{
+		//This section is currently full of rubbish
+		//Because I'm just using it to test classes and functions as I go
+		
+		//PERMANENT GRAPHICS
+		//Shouldn't be deleted when the scene is cleared.
+		this.add.image(w/2, h/2, 'blood');
+		
+		//VESSEL GRAPHICS
+		let vesselGraphics = this.add.graphics(w/2,h/2);
+		vesselGraphics.lineStyle(5, vesselColour, 1.0);
+		vesselGraphics.fillStyle(vesselColour, 1.0);
+		
+		//TESTING BLOCK
+		//For now, this section is used to test generation.
+		
+		var testParams = new levelParams();
+		testParams.SetParams(Phaser.Math.Between(1,5),"FULL");
+		
+		var vesselHandler = new vesselGenerator();
+		
+		this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		
+
+		for (var i = 0;i < testParams.difficulty;i++)
+		{
+			var targetVessel = (i == testParams.difficulty - 1) ? (true) : (false); //If this is the last vessel to be placed, tells PlaceVessel that it needs to be real
+		
+			var newVessel = vesselHandler.GenerateVessel(targetVessel);
+			
+			newVessel.drawLines(this,vesselGraphics);
+
+		}
+		
+		
+	}
+
+	function update ()
+	{
+	}
+	
+
+
+</script>
+
+</body>
+</html>
