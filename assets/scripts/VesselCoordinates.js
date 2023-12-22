@@ -1,35 +1,36 @@
-	//This class holds the coordinates of blood vessel nodes points.
+	//This class holds the coordinates of blood vessel end points.
+	//it holds two point classes.
 	
 	class vesselCoordinates
 	
 	{
 
-		//Point 1
-		point1 = new point;
-		//Point 2
-		point2 = new point;
-		
-		vesselCoordinates(a,b,c,d) 
+		constructor(a,b,c,d) 
 		{
-			
-		//Known issue: this constructor doesn't actually work for the time being. Use SetCoordinates after creating instance or coords will always be default.
-		
-		this.point1.x = a;
-		this.point1.y = b;
-		this.point2.x = c;
-		this.point2.y = d;
+
+		this.point1 = new point(a,b); 	//First point
+		this.point2 = new point(c,d);	//Second point
 			
 		}
 		
 		SetCoordinates(a,b,c,d)
 		{
 			
-		//Sets coordinates for the blood vessel's endpoints. 
+		//Sets coordinates of the blood vessel's endpoints. 
 		
 		this.point1.x = a;
 		this.point1.y = b;	
 		this.point2.x = c;
 		this.point2.y = d;
+		
+		}
+		
+		GetCoordinates() 
+		
+		//Returns an array containing [point 1.x,point 1.y, point2.x, point2.y]
+		{
+		
+		return [this.point1.x,this.point1.y,this.point2.x,this.point2.y];
 		
 		}
 		

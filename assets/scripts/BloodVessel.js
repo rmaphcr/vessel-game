@@ -3,10 +3,13 @@
 class bloodVessel
 	
 	{
-		endPoints = [];
-		midPoints = [];
-		endCol1 = 0x000000;
-		endCol2 = 0x000000;
+		constructor(endPoints,midPoints,endCol1,endCol2)	//(vesselCoordinates object, array, s)
+		{
+			this.endPoints = endPoints;								//vesselCoordinates object 
+			this.midPoints = midPoints; 							//array of integers, where each pair of integers is a midpoint
+			this.endCol1 = endCol1;
+			this.endCol2 = endCol2;
+		}
 		
 		setEndPoints(newEnds)
 		
@@ -84,6 +87,7 @@ class bloodVessel
 			console.log("Spline center:" + splineX + "," + splineY);
 			const splineCurve = new Phaser.Curves.Spline(splinePoints);
 			let splineObject = scene.add.curve(splineX,splineY,splineCurve);
+			this.spline = splineObject;
 			
 			splineCurve.draw(graphics);
 		}

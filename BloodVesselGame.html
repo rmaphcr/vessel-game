@@ -50,6 +50,7 @@
 		this.load.script('s_BloodVessel','assets/scripts/BloodVessel.js');
 		this.load.script('s_PointGenerator','assets/scripts/PointGenerator.js');
 		this.load.script('s_VesselGenerator','assets/scripts/VesselGenerator.js');
+		this.load.script('s_Camera','assets/scripts/Camera.js');
 
 	}
 
@@ -70,13 +71,16 @@
 		//TESTING BLOCK
 		//For now, this section is used to test generation.
 		
-		var testParams = new levelParams();
-		testParams.SetParams(Phaser.Math.Between(1,5),"FULL");
+		var testParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
+		//testParams.SetParams(Phaser.Math.Between(1,5));
+		//testParams.camSize = (Phaser.Math.Between(1,10))/10;
 		
 		var vesselHandler = new vesselGenerator();
 		
 		this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		this.add.text(w/2, h/3, "Camera Size: " + testParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 		
+		var bloodVessels = []; //list for the blood vessel objects to live in
 
 		for (var i = 0;i < testParams.difficulty;i++)
 		{
@@ -85,14 +89,29 @@
 			var newVessel = vesselHandler.GenerateVessel(targetVessel);
 			
 			newVessel.drawLines(this,vesselGraphics);
+			
+			bloodVessels.push(newVessel);
 
 		}
 		
+		cameraRadius = (w/2) * testParams.camSize;
+		
+		//CAMERA AND MASK TESTING
+		mainCamera = new Camera(this,cameraRadius,false); 							//camera
+		
+		cameraMask = new Phaser.Display.Masks.BitmapMask(this, mainCamera.circle)	//mask
+		cameraMask.invertAlpha = true;
+		
+		screenBlocker = this.add.rectangle(w/2, h/2, w, h, 0x000000);
+		screenBlocker.setMask(cameraMask);
+			//ok now it works, split the mask stuff off into its own file later though
 		
 	}
 
-	function update ()
+	function update()
 	{
+		mainCamera.UpdatePosition();
+		
 	}
 	
 

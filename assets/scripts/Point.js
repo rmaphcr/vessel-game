@@ -4,9 +4,10 @@
 		x = 0;
 		y = 0;
 		
-		SetCoordinates(newX,newY)
+		constructor(x,y)
 		{
-			this.x = newX;
-			this.y = newY;
+			this.x = x;
+			this.y = y;
 		}
+		
 	}

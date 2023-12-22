@@ -24,15 +24,11 @@ class vesselGenerator //this class's methods are called to generate blood vessel
 			}
 				
 			let generator = new pointGenerator();
-			let endPoints = generator.GenerateEndPoints(); //array containing the end points
+			let endPoints = generator.GenerateEndPoints(); 			//array containing the end points
 			let midPoints = generator.GenerateMidPoints(endPoints); //array containing the mid points
 
 
-			let newVessel = new bloodVessel();
-			newVessel.setEndPoints(endPoints);
-			newVessel.setMidPoints(midPoints);
-			newVessel.endCol1 = endCol1;
-			newVessel.endCol2 = endCol2;
+			let newVessel = new bloodVessel(endPoints,midPoints,endCol1,endCol2);
 			newVessel.disturbMidPoints(midPointDisturbance);
 				
 			return newVessel;

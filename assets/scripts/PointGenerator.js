@@ -1,22 +1,13 @@
 	class pointGenerator // This class's purpose is to generate a pair of points within a specified screen boundary. 
 	{
-
 		
-		//below members define the area the generator draws points within. Screen size with offset buffer by default.
-		
-		boundaryX1 = standardOffset;
-		boundaryX2 = w - standardOffset;
-		boundaryY1 = standardOffset;
-		boundaryY2 = h - standardOffset;
-		
-		pointGenerator(a,b,c,d,o)
+		constructor()
 		{
-		//constructor, allows assignment of boundary variables. Doesn't work, like all constructors in this program.
-			
-			this.boundaryX1 = a;
-			this.boundaryX2 = b;
-			this.boundaryY1 = c;
-			this.boundaryY2 = d;
+			//below members define the area the generator draws points within. Screen size with offset buffer by default.
+			this.boundaryX1 = standardOffset;
+			this.boundaryX2 = w - standardOffset;
+			this.boundaryY1 = standardOffset;
+			this.boundaryY2 = h - standardOffset;
 		}
 		
 		GenerateEndPoints()
@@ -26,7 +17,7 @@
 			
 			var coords = new vesselCoordinates();
 			
-			var whichEdge = Phaser.Math.Between(1,2);	//Flips a coin to determine whether the vessel is generated spanning top and bottom, or left and right
+			const whichEdge = Phaser.Math.Between(1,2);	//Flips a coin to determine whether the vessel is generated spanning top and bottom, or left and right
 			
 			switch(whichEdge)
 			{
@@ -72,9 +63,6 @@
 			//Given a vesselCoordinates, returns an array of n evenly spaced points between the endpoints.
 			var pointArray = [];
 			
-			var newX = 0;
-			var newY = 0;
-			
 			console.log("GENERATING VESSEL MIDPOINTS");
 
 			for (var i = 1;2*i <= splinePoints * 2;i++)
@@ -95,10 +83,9 @@
 					stepY *= -1;
 				}
 			
-				newX = coords.point1.x + (i*stepX); 
-				newY = coords.point1.y + (i*stepY);
-				var newPoint = new point();
-				newPoint.SetCoordinates(newX,newY);
+				let newX = coords.point1.x + (i*stepX); 
+				let newY = coords.point1.y + (i*stepY);
+				var newPoint = new point(newX,newY);
 				
 				pointArray.push(newPoint);
 				
