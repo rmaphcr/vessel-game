@@ -1,7 +1,9 @@
 	//These are global settings of the game.
 	
-	var w = config.width; 				//integer, width of screen
-	var h = config.height; 				//integer, height of screen
+	let w = config.width; 				//integer, width of screen
+	let h = config.height; 				//integer, height of screen
+	
+	let clockTick = 500; 				//how often to update clock (in ms)
 	
 	var standardOffset = 30;			//offset of vessel end points from the edge of the screen
 	var endPointSize = 15 				//size of endpoint circles

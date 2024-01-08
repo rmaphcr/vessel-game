@@ -51,6 +51,9 @@
 		this.load.script('s_PointGenerator','assets/scripts/PointGenerator.js');
 		this.load.script('s_VesselGenerator','assets/scripts/VesselGenerator.js');
 		this.load.script('s_Camera','assets/scripts/Camera.js');
+		this.load.script('s_LevelTimer','assets/scripts/LevelTimer.js');
+		this.load.script('s_CutCursor','assets/scripts/CuttingHead.js');
+		this.load.script('s_KeyManager','assets/scripts/KeyManager.js');
 
 	}
 
@@ -68,6 +71,9 @@
 		vesselGraphics.lineStyle(5, vesselColour, 1.0);
 		vesselGraphics.fillStyle(vesselColour, 1.0);
 		
+		//KEYBOARD 
+		keyManager = new KeyManager(this);
+		
 		//TESTING BLOCK
 		//For now, this section is used to test generation.
 		
@@ -77,8 +83,7 @@
 		
 		var vesselHandler = new vesselGenerator();
 		
-		this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-		this.add.text(w/2, h/3, "Camera Size: " + testParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+
 		
 		var bloodVessels = []; //list for the blood vessel objects to live in
 
@@ -94,9 +99,15 @@
 
 		}
 		
-		cameraRadius = (w/2) * testParams.camSize;
+		//CURSOR
+		
+		cutCursor = new cutHead(this,keyManager,5,5,w,h); //places cursor at your mouse position to begin the game
+		
 		
 		//CAMERA AND MASK TESTING
+		
+		cameraRadius = (w/2) * testParams.camSize;
+		
 		mainCamera = new Camera(this,cameraRadius,false); 							//camera
 		
 		cameraMask = new Phaser.Display.Masks.BitmapMask(this, mainCamera.circle)	//mask
@@ -105,12 +116,25 @@
 		screenBlocker = this.add.rectangle(w/2, h/2, w, h, 0x000000);
 		screenBlocker.setMask(cameraMask);
 			//ok now it works, split the mask stuff off into its own file later though
+			
+		
+		timer = new levelTimer(this,clockTick) //new clock which updates every 500 ms
+		
+		
+		//TEMPORARY TEXT (TURN INTO BETTER UI LATER)
+		this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		this.add.text(w/2, h/3, "Camera Size: " + testParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		timerText = this.add.text(w/2, h/4, "Time Elapsed: " + timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 		
 	}
 
 	function update()
 	{
 		mainCamera.UpdatePosition();
+		cutCursor.ListenForKeys();
+		cutCursor.ListenForMouse();
+		console.log(timer.GetLevelTime())
+		timerText.setText("Time Elapsed: " + timer.GetLevelTime());
 		
 	}
 	
