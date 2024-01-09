@@ -3,10 +3,12 @@ class cutHead
 	
 	//This class implements the cutting head.
 	
-	constructor(scene,keymanager,size,speed,x_max,y_max)
+	constructor(scene,graphics,keymanager,size,speed,x_max,y_max)
 	{
 	
 		this.scene = scene; //the scene to which the cutting head is bound. Usually "this".
+		
+		this.graphics = graphics; //the graphics layer which this cutting head draws on (used for line display)
 	
 		this.size = size;	//the size (radius of circle for now) of the object
 		
@@ -48,15 +50,20 @@ class cutHead
 	{
 		if (game.input.activePointer.leftButtonDown() == true)	//if left click is being held down
 		{
+			this.graphics.clear();
 			console.log("cutting");
 			
 			if (this.leftClicking == false) //first frame where click is detected
 			{
 				this.DesignateCutStart();	//tells the game a cut is beginning
+				this.graphics.moveTo();
+				this.graphics.beginPath();
+				this.StartLine();
+
 			}
 			
+			this.UpdateLine();	
 			this.leftClicking = true;	//tracks click, so that we can then track release 
-			//also to do: draw the graphics line
 		}
 		
 		if (game.input.activePointer.leftButtonDown() == false & this.leftClicking == true)	//if left click is released
@@ -113,8 +120,8 @@ class cutHead
 		
 		this.GoBlue();
 		
-		this.line.x2 = this.object.x; //updates line coords
-		this.line.y2 = this.object.y;
+		this.line.x1 = this.object.x; //updates line coords
+		this.line.y1 = this.object.y;
 		console.log("Cut starting at " + this.line.x1 + "," + this.line.y1 + ".");
 	}
 	
@@ -123,18 +130,29 @@ class cutHead
 	{
 		console.log("Cut ending at " + this.line.x2 + "," + this.line.y2 + ".");
 		this.GoWhite();
+		this.graphics.clear()
 		
-		this.InitiateCutLine(); //calls a method to create a line and check its intersection with all the blood vessel splines in the scene
+		this.InitiateCutLine(); //calls a method to check the line's intersection with all the blood vessel splines in the scene
 	}
 	
-	DrawLine() //this function is called every frame if the left mouse button is held down. It deletes and redraws a *graphics* line over the cuthead's cutting line.
+	StartLine() //this function is called every frame if the left mouse button is held down. It deletes and redraws a *graphics* line over the cuthead's cutting line.
 	{
 		//PLACEHOLDER
+		console.log("drawing")
+		this.graphics.clear();
+		this.graphics.moveTo(this.line.x1,this.line.y1);
 	}
 	
-	HideLine()	//this function will be called at the end of a cut to hide the line.
+	UpdateLine()
 	{
-		
+		this.line.x2 = this.object.x;
+		this.line.y2 = this.object.y; 
+		this.graphics.clear();
+		this.graphics.beginPath();
+		this.graphics.moveTo(this.line.x1,this.line.y1);
+		this.graphics.lineTo(this.line.x2,this.line.y2);
+		this.graphics.closePath();
+		this.graphics.strokePath();
 	}
 	
 	InitiateCutLine()//method which takes the cut head's current cutting line, and checks its intersection with all blood vessels in the scene.
