@@ -3,12 +3,15 @@
 class bloodVessel
 	
 	{
-		constructor(endPoints,midPoints,endCol1,endCol2)	//(vesselCoordinates object, array, s)
+		constructor(endPoints,midPoints,endCol1,endCol2, graphics)	//(vesselCoordinates object, array, s)
 		{
 			this.endPoints = endPoints;								//vesselCoordinates object 
 			this.midPoints = midPoints; 							//array of integers, where each pair of integers is a midpoint
 			this.endCol1 = endCol1;
 			this.endCol2 = endCol2;
+			
+			this.scene = defaultScene;
+			this.graphics = graphics;
 		}
 		
 		setEndPoints(newEnds)
@@ -60,12 +63,6 @@ class bloodVessel
 			scene.add.circle(this.endPoints.point1.x,this.endPoints.point1.y, endPointSize, this.endCol1, 1);
 			scene.add.circle(this.endPoints.point2.x,this.endPoints.point2.y, endPointSize, this.endCol2, 1); 
 			
-			for (var i = 0;i<this.midPoints.length;i++) 
-			{
-				scene.add.circle(this.midPoints[i].x,this.midPoints[i].y,vesselThickness * 2,vesselColour,1);
-				console.log("Drew Midpoint At " + this.midPoints[i].x  + "," +  this.midPoints[i].y);
-			}
-			
 			var splinePoints = [];
 			
 			for (var i = 0;i<this.midPoints.length;i++)
@@ -86,9 +83,35 @@ class bloodVessel
 			let splineY = (splinePoints[1] + splinePoints[splinePoints.length-1])/2;
 			console.log("Spline center:" + splineX + "," + splineY);
 			const splineCurve = new Phaser.Curves.Spline(splinePoints);
+			this.curve = splineCurve
 			let splineObject = scene.add.curve(splineX,splineY,splineCurve);
 			this.spline = splineObject;
 			
-			splineCurve.draw(graphics);
+			this.SplitLine(vesselLineSplits);
+			this.CreateLineGeometry();
+		}
+		
+		SplitLine(number)
+		{
+			this.linePoints = this.curve.getPoints(number+1)
+		}
+		
+		CreateLineGeometry()
+		{
+			this.segments = []
+			
+			for (let i = 0; i < this.linePoints.length - 1; i++)
+			{
+				let segment = new Phaser.Geom.Line(this.linePoints[i].x,this.linePoints[i].y,this.linePoints[i+1].x,this.linePoints[i+1].y); //new line btwn point and next
+				this.segments.push(segment); //add line to list
+				this.graphics.strokePoints(this.linePoints);
+				
+			}
+		}
+		
+		Cut()
+		{
+			console.log("a vessel was cut!") //placeholder
+
 		}
 	}

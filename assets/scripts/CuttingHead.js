@@ -3,10 +3,12 @@ class cutHead
 	
 	//This class implements the cutting head.
 	
-	constructor(scene,graphics,keymanager,size,speed,x_max,y_max)
+	constructor(scene,vessels,graphics,keymanager,size,speed,x_max,y_max)
 	{
 	
 		this.scene = scene; //the scene to which the cutting head is bound. Usually "this".
+		
+		this.vessels = vessels //the scene's list of blood vessels
 		
 		this.graphics = graphics; //the graphics layer which this cutting head draws on (used for line display)
 	
@@ -26,8 +28,7 @@ class cutHead
 		
 		this.ResetPosition(); //starts the cuthead cursor at the mouse location
 		
-		this.line = scene.add.line(0,0,this.object.x,this.object.y,this.object.x,this.object.y); //initiates cut line. The coordinates will update during clicking
-		
+		this.line = new Phaser.Geom.Line(0,0,this.object.x,this.object.y,this.object.x,this.object.y); //initiates cut line. The coordinates will update during clicking
 	}
 	
 	GoWhite()
@@ -80,7 +81,6 @@ class cutHead
 	ListenForKeys()	//listens for key input
 	
 	{
-		
 			
 		if(this.keymanager.arrows.left.isDown & this.object.x >= this.speed)
 		{
@@ -158,8 +158,23 @@ class cutHead
 	InitiateCutLine()//method which takes the cut head's current cutting line, and checks its intersection with all blood vessels in the scene.
 	
 	{
-		//PLACEHOLDER
+		//currently working
+		console.log("initiating cutting for cut line between:")
+		console.log("(x: " + this.line.x1 + ",y: " + this.line.y1 + ") AND ")
+		console.log("(x: " + this.line.x2 + ",y: " + this.line.y2 + ")")
 		
+		for (var i = 0;i < this.vessels.length;i++) //for each blood vessel in the scene
+		{
+			//console.log("checking blood vessel " + i)
+			for (var j = 0; j< this.vessels[i].segments.length;j++) //for each line segment in vessel
+			{
+				//console.log("checking blood vessel " + i + " segment " + j);
+				if (Phaser.Geom.Intersects.LineToLine(this.line,this.vessels[i].segments[j])) //if segment and cut line intersect
+				{
+					console.log("Cut detected in blood vessel " + i + ", segment " + j + "!") //placeholder line to show functionality
+				}
+			}
+		}
 	}
 	
 }

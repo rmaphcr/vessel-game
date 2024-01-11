@@ -1,5 +1,10 @@
 class vesselGenerator //this class's methods are called to generate blood vessels in the current scene.
 	{
+		constructor(graphics)
+		{
+			this.graphics = graphics
+		}
+		
 		GenerateVessel(target)
 		{
 			
@@ -28,7 +33,7 @@ class vesselGenerator //this class's methods are called to generate blood vessel
 			let midPoints = generator.GenerateMidPoints(endPoints); //array containing the mid points
 
 
-			let newVessel = new bloodVessel(endPoints,midPoints,endCol1,endCol2);
+			let newVessel = new bloodVessel(endPoints,midPoints,endCol1,endCol2,this.graphics);
 			newVessel.disturbMidPoints(midPointDisturbance);
 				
 			return newVessel;

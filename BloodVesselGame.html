@@ -21,8 +21,11 @@
 		physics: {
 			default: 'arcade',
 			arcade: {
-				gravity: { y: 300 },
-				debug: false
+				debug: true,
+				gravity:
+				{
+					y:0
+				}
 			}
 		},
 		scene: {
@@ -87,7 +90,7 @@
 		//testParams.SetParams(Phaser.Math.Between(1,5));
 		//testParams.camSize = (Phaser.Math.Between(1,10))/10;
 	
-		var vesselHandler = new vesselGenerator();
+		var vesselHandler = new vesselGenerator(vesselGraphics);
 		
 		var bloodVessels = []; //list for the blood vessel objects to live in
 
@@ -103,9 +106,10 @@
 
 		}
 		
+		
 		//CURSOR
 		
-		cutCursor = new cutHead(this,lineGraphics,keyManager,5,5,w,h); //places cursor at your mouse position to begin the game
+		cutCursor = new cutHead(this,bloodVessels,lineGraphics,keyManager,5,5,w,h); //places cursor at your mouse position to begin the game
 		
 		
 		//CAMERA AND MASK TESTING
@@ -137,7 +141,6 @@
 		mainCamera.UpdatePosition();
 		cutCursor.ListenForKeys();
 		cutCursor.ListenForMouse();
-		console.log(timer.GetLevelTime())
 		timerText.setText("Time Elapsed: " + timer.GetLevelTime());
 		
 	}

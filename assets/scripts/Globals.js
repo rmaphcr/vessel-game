@@ -13,4 +13,4 @@
 	var splinePoints = 5;				//number of points to draw between endpoints for spline connection
 	var vesselColour = 0x87a7b0;			//colour of blood vessel lines
 	var vesselThickness = 3; 			//thickness of blood vessels
-	
+	var vesselLineSplits = 20; 			//how many line segments in blood vessels
