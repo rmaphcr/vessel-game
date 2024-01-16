@@ -33,7 +33,7 @@ class vesselGenerator //this class's methods are called to generate blood vessel
 			let midPoints = generator.GenerateMidPoints(endPoints); //array containing the mid points
 
 
-			let newVessel = new bloodVessel(endPoints,midPoints,endCol1,endCol2,this.graphics);
+			let newVessel = new bloodVessel(endPoints,midPoints,endCol1,endCol2,target,this.graphics);
 			newVessel.disturbMidPoints(midPointDisturbance);
 				
 			return newVessel;

@@ -172,6 +172,8 @@ class cutHead
 				if (Phaser.Geom.Intersects.LineToLine(this.line,this.vessels[i].segments[j])) //if segment and cut line intersect
 				{
 					console.log("Cut detected in blood vessel " + i + ", segment " + j + "!") //placeholder line to show functionality
+					this.vessels[i].Cut() //calls cut method of vessel
+					break;	//stops multiple cuts of the same segment counting as multiple mistakes, by breaking the segment loop 
 				}
 			}
 		}

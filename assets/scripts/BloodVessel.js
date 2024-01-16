@@ -3,15 +3,17 @@
 class bloodVessel
 	
 	{
-		constructor(endPoints,midPoints,endCol1,endCol2, graphics)	//(vesselCoordinates object, array, s)
+		constructor(endPoints,midPoints,endCol1,endCol2,isTarget,graphics)	//(vesselCoordinates object, array, s)
 		{
-			this.endPoints = endPoints;								//vesselCoordinates object 
-			this.midPoints = midPoints; 							//array of integers, where each pair of integers is a midpoint
+			this.endPoints = endPoints;										//vesselCoordinates object 
+			this.midPoints = midPoints; 									//array of integers, where each pair of integers is a midpoint
 			this.endCol1 = endCol1;
 			this.endCol2 = endCol2;
 			
 			this.scene = defaultScene;
 			this.graphics = graphics;
+			
+			this.isTarget = isTarget // true or false. Defines whether or not this blood vessel is the 'chosen one'
 		}
 		
 		setEndPoints(newEnds)
@@ -112,6 +114,18 @@ class bloodVessel
 		Cut()
 		{
 			console.log("a vessel was cut!") //placeholder
+			
+			if (this.isTarget == true) //if this is the correct blood vessel
+			{
+				console.log("This was the target blood vessel.")
+				levelRecord.complete();
+			}
+			
+			else
+			{
+				console.log("This was not the target blood vessel.")
+				levelRecord.incrementMistakes();
+			}
 
 		}
 	}

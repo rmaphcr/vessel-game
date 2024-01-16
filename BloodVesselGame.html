@@ -57,11 +57,15 @@
 		this.load.script('s_LevelTimer','assets/scripts/LevelTimer.js');
 		this.load.script('s_CutCursor','assets/scripts/CuttingHead.js');
 		this.load.script('s_KeyManager','assets/scripts/KeyManager.js');
+		this.load.script('s_LevelRecord','assets/scripts/levelRecord.js');
+		this.load.script('s_Level','assets/scripts/level.js');
 
 	}
 
 	function create ()
 	{
+		
+
 		//This section is currently full of rubbish
 		//Because I'm just using it to test classes and functions as I go
 		
@@ -70,7 +74,7 @@
 		this.add.image(w/2, h/2, 'blood');
 		
 		//VESSEL GRAPHICS - displays blood vessels only
-		let vesselGraphics = this.add.graphics(w/2,h/2);
+		let vesselGraphics = this.add.graphics(w/2,h/2);	
 		vesselGraphics.lineStyle(5, vesselColour, 1.0);
 		vesselGraphics.fillStyle(vesselColour, 1.0);
 
@@ -90,11 +94,18 @@
 		//testParams.SetParams(Phaser.Math.Between(1,5));
 		//testParams.camSize = (Phaser.Math.Between(1,10))/10;
 	
+		//LEVEL GENERATION BEGINS
+			
+		level = new level();
+		level.generate();	//all the creation stuff should be in here
+	
 		var vesselHandler = new vesselGenerator(vesselGraphics);
 		
-		var bloodVessels = []; //list for the blood vessel objects to live in
+		levelRecord = new levelRecord(1);
+		
+		var bloodVessels = []; //list for the blood vessel objects to live in. Put away inside a level class?
 
-		for (var i = 0;i < testParams.difficulty;i++)
+		for (var i = 0;i < testParams.difficulty;i++)	//put this inside levelGenerator class?
 		{
 			var targetVessel = (i == testParams.difficulty - 1) ? (true) : (false); //If this is the last vessel to be placed, tells PlaceVessel that it needs to be real
 		
@@ -128,11 +139,11 @@
 		
 		timer = new levelTimer(this,clockTick) //new clock which updates every 500 ms
 		
-		
 		//TEMPORARY TEXT (TURN INTO BETTER UI LATER)
 		this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 		this.add.text(w/2, h/3, "Camera Size: " + testParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 		timerText = this.add.text(w/2, h/4, "Time Elapsed: " + timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		mistakeText = this.add.text(w/2, h/5, "Mistakes: " + levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 		
 	}
 
@@ -142,6 +153,7 @@
 		cutCursor.ListenForKeys();
 		cutCursor.ListenForMouse();
 		timerText.setText("Time Elapsed: " + timer.GetLevelTime());
+		mistakeText.setText("Mistakes: " + levelRecord.mistakenCuts);
 		
 	}
 	

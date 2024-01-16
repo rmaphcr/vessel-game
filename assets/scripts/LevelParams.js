@@ -10,5 +10,7 @@
 			this.difficulty = difficulty; 	//Number of blood vessels to generate
 			this.camSize = camSize;			//Size of camera aperture (proportional to half screen width)
 		}
+		
+		
 
 	}
