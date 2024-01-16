@@ -61,9 +61,12 @@ class bloodVessel
 		
 		drawLines(scene,graphics)
 		{
+			this.graphics.fillStyle(this.endCol1, 1.0);	
+			this.graphics.fillCircle(this.endPoints.point1.x,this.endPoints.point1.y, endPointSize);
+			this.graphics.fillStyle(this.endCol2, 1.0);	
+			this.graphics.fillCircle(this.endPoints.point2.x,this.endPoints.point2.y, endPointSize); 
 			
-			scene.add.circle(this.endPoints.point1.x,this.endPoints.point1.y, endPointSize, this.endCol1, 1);
-			scene.add.circle(this.endPoints.point2.x,this.endPoints.point2.y, endPointSize, this.endCol2, 1); 
+			this.graphics.fillStyle(vesselColour, 1.0) //reset fill col
 			
 			var splinePoints = [];
 			
@@ -83,14 +86,18 @@ class bloodVessel
 			
 			let splineX = (splinePoints[0] + splinePoints[splinePoints.length-2])/2;
 			let splineY = (splinePoints[1] + splinePoints[splinePoints.length-1])/2;
-			console.log("Spline center:" + splineX + "," + splineY);
+			//console.log("Spline center:" + splineX + "," + splineY);
 			const splineCurve = new Phaser.Curves.Spline(splinePoints);
 			this.curve = splineCurve
 			let splineObject = scene.add.curve(splineX,splineY,splineCurve);
 			this.spline = splineObject;
 			
+			//console.log("spline created")
+			
 			this.SplitLine(vesselLineSplits);
+			//console.log("spline split")
 			this.CreateLineGeometry();
+			//console.log("line geometry created")
 		}
 		
 		SplitLine(number)
@@ -118,13 +125,13 @@ class bloodVessel
 			if (this.isTarget == true) //if this is the correct blood vessel
 			{
 				console.log("This was the target blood vessel.")
-				levelRecord.complete();
+				level.levelRecord.complete();
 			}
 			
 			else
 			{
 				console.log("This was not the target blood vessel.")
-				levelRecord.incrementMistakes();
+				level.levelRecord.incrementMistakes();
 			}
 
 		}

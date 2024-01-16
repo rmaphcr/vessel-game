@@ -63,12 +63,12 @@
 			//Given a vesselCoordinates, returns an array of n evenly spaced points between the endpoints.
 			var pointArray = [];
 			
-			console.log("GENERATING VESSEL MIDPOINTS");
+			//console.log("GENERATING VESSEL MIDPOINTS");
 
 			for (var i = 1;2*i <= splinePoints * 2;i++)
 			{
 			
-				console.log("LOOP CONTINUES");
+				//console.log("LOOP CONTINUES");
 				
 				var stepX = Math.abs(coords.point2.x-coords.point1.x)/(splinePoints+1);
 				var stepY = Math.abs(coords.point2.y-coords.point1.y)/(splinePoints+1);
@@ -87,6 +87,7 @@
 				let newY = coords.point1.y + (i*stepY);
 				var newPoint = new point(newX,newY);
 				
+				//console.log("pushing to pointArray")
 				pointArray.push(newPoint);
 				
 			} 

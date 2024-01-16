@@ -52,7 +52,7 @@ class cutHead
 		if (game.input.activePointer.leftButtonDown() == true)	//if left click is being held down
 		{
 			this.graphics.clear();
-			console.log("cutting");
+			//console.log("cutting");
 			
 			if (this.leftClicking == false) //first frame where click is detected
 			{
@@ -69,7 +69,7 @@ class cutHead
 		
 		if (game.input.activePointer.leftButtonDown() == false & this.leftClicking == true)	//if left click is released
 		{
-			console.log("done cutting");
+			//console.log("done cutting");
 			
 			this.leftClicking = false;
 			
@@ -122,13 +122,13 @@ class cutHead
 		
 		this.line.x1 = this.object.x; //updates line coords
 		this.line.y1 = this.object.y;
-		console.log("Cut starting at " + this.line.x1 + "," + this.line.y1 + ".");
+		//console.log("Cut starting at " + this.line.x1 + "," + this.line.y1 + ".");
 	}
 	
 	DesignateCutEnd() //designates end point for cutting
 	
 	{
-		console.log("Cut ending at " + this.line.x2 + "," + this.line.y2 + ".");
+		//console.log("Cut ending at " + this.line.x2 + "," + this.line.y2 + ".");
 		this.GoWhite();
 		this.graphics.clear()
 		
@@ -138,7 +138,7 @@ class cutHead
 	StartLine() //this function is called every frame if the left mouse button is held down. It deletes and redraws a *graphics* line over the cuthead's cutting line.
 	{
 		//PLACEHOLDER
-		console.log("drawing")
+		//console.log("drawing")
 		this.graphics.clear();
 		this.graphics.moveTo(this.line.x1,this.line.y1);
 	}
@@ -159,9 +159,9 @@ class cutHead
 	
 	{
 		//currently working
-		console.log("initiating cutting for cut line between:")
-		console.log("(x: " + this.line.x1 + ",y: " + this.line.y1 + ") AND ")
-		console.log("(x: " + this.line.x2 + ",y: " + this.line.y2 + ")")
+		//console.log("initiating cutting for cut line between:")
+		//console.log("(x: " + this.line.x1 + ",y: " + this.line.y1 + ") AND ")
+		//console.log("(x: " + this.line.x2 + ",y: " + this.line.y2 + ")")
 		
 		for (var i = 0;i < this.vessels.length;i++) //for each blood vessel in the scene
 		{
@@ -171,7 +171,7 @@ class cutHead
 				//console.log("checking blood vessel " + i + " segment " + j);
 				if (Phaser.Geom.Intersects.LineToLine(this.line,this.vessels[i].segments[j])) //if segment and cut line intersect
 				{
-					console.log("Cut detected in blood vessel " + i + ", segment " + j + "!") //placeholder line to show functionality
+					//console.log("Cut detected in blood vessel " + i + ", segment " + j + "!") //placeholder line to show functionality
 					this.vessels[i].Cut() //calls cut method of vessel
 					break;	//stops multiple cuts of the same segment counting as multiple mistakes, by breaking the segment loop 
 				}

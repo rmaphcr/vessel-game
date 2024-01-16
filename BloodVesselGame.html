@@ -64,19 +64,16 @@
 
 	function create ()
 	{
-		
+		//CURRENT ISSUE: NEW LEVELS GENERATE AS INTENDED, BUT AFTER FIRST LEVEL THE ABILITY TO CUT ACCURATELY HAS BEEN LOST
+		//FIGURE OUT HWY AND SORT IT OUT 16 01 24
+			
 
-		//This section is currently full of rubbish
-		//Because I'm just using it to test classes and functions as I go
-		
 		//PERMANENT GRAPHICS
 		//Shouldn't be deleted when the scene is cleared.
 		this.add.image(w/2, h/2, 'blood');
 		
 		//VESSEL GRAPHICS - displays blood vessels only
 		let vesselGraphics = this.add.graphics(w/2,h/2);	
-		vesselGraphics.lineStyle(5, vesselColour, 1.0);
-		vesselGraphics.fillStyle(vesselColour, 1.0);
 
 				
 		//CUTTING LINE GRAPHICS - displays cutting lines only
@@ -91,37 +88,9 @@
 		//For now, this section is used to test generation.
 		
 		var testParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
+		
 		//testParams.SetParams(Phaser.Math.Between(1,5));
 		//testParams.camSize = (Phaser.Math.Between(1,10))/10;
-	
-		//LEVEL GENERATION BEGINS
-			
-		level = new level();
-		level.generate();	//all the creation stuff should be in here
-	
-		var vesselHandler = new vesselGenerator(vesselGraphics);
-		
-		levelRecord = new levelRecord(1);
-		
-		var bloodVessels = []; //list for the blood vessel objects to live in. Put away inside a level class?
-
-		for (var i = 0;i < testParams.difficulty;i++)	//put this inside levelGenerator class?
-		{
-			var targetVessel = (i == testParams.difficulty - 1) ? (true) : (false); //If this is the last vessel to be placed, tells PlaceVessel that it needs to be real
-		
-			var newVessel = vesselHandler.GenerateVessel(targetVessel);
-			
-			newVessel.drawLines(this,vesselGraphics);
-			
-			bloodVessels.push(newVessel);
-
-		}
-		
-		
-		//CURSOR
-		
-		cutCursor = new cutHead(this,bloodVessels,lineGraphics,keyManager,5,5,w,h); //places cursor at your mouse position to begin the game
-		
 		
 		//CAMERA AND MASK TESTING
 		
@@ -133,31 +102,51 @@
 		cameraMask.invertAlpha = true;
 		
 		screenBlocker = this.add.rectangle(w/2, h/2, w, h, 0x000000);
+		screenBlocker.setDepth(1000); //keeps rectangle in front of everything
 		screenBlocker.setMask(cameraMask);
-			//ok now it works, split the mask stuff off into its own file later though
 			
+	
+		//LEVEL GENERATION 
 		
 		timer = new levelTimer(this,clockTick) //new clock which updates every 500 ms
+			
+		level = new level(this,vesselGraphics, timer, mainCamera);
+		level.generate(testParams);	//all the creation stuff should be in here
+	
+		//CURSOR
+		
+		cutCursor = new cutHead(this,level.bloodVessels,lineGraphics,keyManager,5,5,w,h); //places cursor at your mouse position to begin the game
+		
+		
+
 		
 		//TEMPORARY TEXT (TURN INTO BETTER UI LATER)
-		this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-		this.add.text(w/2, h/3, "Camera Size: " + testParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		
+		//this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		//this.add.text(w/2, h/3, "Camera Size: " + testParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 		timerText = this.add.text(w/2, h/4, "Time Elapsed: " + timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-		mistakeText = this.add.text(w/2, h/5, "Mistakes: " + levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		mistakeText = this.add.text(w/2, h/5, "Mistakes: " + level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 		
 	}
 
 	function update()
 	{
+		if (level.levelRecord.completed == true)
+		{
+			var testParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
+			level.generate(testParams);
+			cutCursor.vessels = level.bloodVessels;
+
+		}
+		
+
 		mainCamera.UpdatePosition();
 		cutCursor.ListenForKeys();
 		cutCursor.ListenForMouse();
 		timerText.setText("Time Elapsed: " + timer.GetLevelTime());
-		mistakeText.setText("Mistakes: " + levelRecord.mistakenCuts);
+		mistakeText.setText("Mistakes: " + level.levelRecord.mistakenCuts);
 		
 	}
-	
-
 
 </script>
 
