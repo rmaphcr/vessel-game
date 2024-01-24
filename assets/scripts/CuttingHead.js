@@ -85,21 +85,25 @@ class cutHead
 		if(this.keymanager.arrows.left.isDown & this.object.x >= this.speed)
 		{
 			this.object.x -= this.speed;
+			this.scene.levelMotionTotal += this.speed;
 		}
 			
-		if(this.keymanager.arrows.right.isDown & this.object.x <= this.x_max-this.speed)
+		else if(this.keymanager.arrows.right.isDown & this.object.x <= this.x_max-this.speed)
 		{
 			this.object.x += this.speed;
+			this.scene.levelMotionTotal += this.speed;
 		}
 		
 		if(this.keymanager.arrows.up.isDown & this.object.y >= this.speed)
 		{
 			this.object.y -= this.speed;
+			this.scene.levelMotionTotal += this.speed;
 		}
 			
-		if(this.keymanager.arrows.down.isDown & this.object.y <= this.y_max-this.speed)
+		else if(this.keymanager.arrows.down.isDown & this.object.y <= this.y_max-this.speed)
 		{
 			this.object.y += this.speed;
+			this.scene.levelMotionTotal += this.speed;
 		}
 						
 		

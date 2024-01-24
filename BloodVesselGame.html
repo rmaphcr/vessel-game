@@ -64,9 +64,10 @@
 
 	function create ()
 	{
-		//CURRENT ISSUE: NEW LEVELS GENERATE AS INTENDED, BUT AFTER FIRST LEVEL THE ABILITY TO CUT ACCURATELY HAS BEEN LOST
+		//CURRENT ISSUE: NEW LEVELS GENERATE AS INTENDED, BUT AFTER FIRST LEVEL THE ABILITY TO CUT ACCURATELY IS SLOWLY LOST
 		//FIGURE OUT HWY AND SORT IT OUT 16 01 24
 			
+		this.levelMotionTotal = 0; //tracks total motion in a level
 
 		//PERMANENT GRAPHICS
 		//Shouldn't be deleted when the scene is cleared.
@@ -134,6 +135,7 @@
 		if (level.levelRecord.completed == true)
 		{
 			var testParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
+			level.recordResults();
 			level.generate(testParams);
 			cutCursor.vessels = level.bloodVessels;
 
