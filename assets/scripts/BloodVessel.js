@@ -82,7 +82,7 @@ class bloodVessel
 			splinePoints.push(this.endPoints.point2.x);
 			splinePoints.push(this.endPoints.point2.y);
 			
-			console.log(splinePoints);
+			//console.log(splinePoints);
 			
 			let splineX = (splinePoints[0] + splinePoints[splinePoints.length-2])/2;
 			let splineY = (splinePoints[1] + splinePoints[splinePoints.length-1])/2;

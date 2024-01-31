@@ -35,24 +35,23 @@ class levelRecord
 		this.currentTime = timer.GetLevelTime();
 	}
 	
-	exportRecord()
-	{
-		//exports the level record to a csv or something
-		//console.log("PLACEHOLDER: EXPORTING THE LEVEL RECORD")
-		this.consoleDump();
-		this.reset();
-	}
-	
 	reset()
 	{
 		this.completed = false;
 		this.number += 1;
 		this.mistakenCuts = 0;
 		this.currentTime = 0;
-		this.difficulty = 0;
 		this.intersections = 0;
 		this.totalMotion = 0;
 		this.vesselCount = 0;
+	}
+	
+	createJSON()
+	{
+		let levelStringJSON = JSON.stringify(this);
+		console.log("CONVERTING LEVEL RECORD TO JSON FILE:")
+		console.log(levelStringJSON);
+		return levelStringJSON;
 	}
 	
 	consoleDump()

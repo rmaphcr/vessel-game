@@ -1,7 +1,7 @@
 class level
 {
 
-	constructor(s,v,t,c, cu)
+	constructor(s,v,t,c,cu)
 	{
 		this.scene = s;
 		this.bloodVessels = []; //list where its blood vessels are stored
@@ -68,7 +68,11 @@ class level
 		
 		//EXPORT AND RESET THE LEVEL RECORD
 		
-		this.levelRecord.exportRecord();
+		this.scene.JSONStringHolder.push(this.levelRecord.createJSON());
+		this.levelRecord.reset();
+		this.scene.levelMotionTotal = 0; //resets level motion. Yes this code is very poorly organised
+		console.log("ALL JSONS SO FAR:");
+		console.log(this.scene.JSONStringHolder);
 		
 	}
 	

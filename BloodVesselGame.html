@@ -34,8 +34,15 @@
 			update: update
 		}
 	};
-	
+
 	var game = new Phaser.Game(config);
+
+	
+	// TO DO
+	//insert code here to send the JSONs somewhere, download them or whatever. Produce a CSV and download it for now?
+	//next task: produce a class 'writeManager' which converts the list of JSONS into a csv, where each row is a JSON, and the columns are its member data.
+	//also: try working out how to generate levels with a particular seed
+	
 
 	function preload()
 	{
@@ -59,15 +66,15 @@
 		this.load.script('s_KeyManager','assets/scripts/KeyManager.js');
 		this.load.script('s_LevelRecord','assets/scripts/levelRecord.js');
 		this.load.script('s_Level','assets/scripts/level.js');
+		this.load.script('s_WriteManager','assets/scripts/writeManager.js');
 
 	}
-
+	
 	function create ()
 	{
-		//CURRENT ISSUE: NEW LEVELS GENERATE AS INTENDED, BUT AFTER FIRST LEVEL THE ABILITY TO CUT ACCURATELY IS SLOWLY LOST
-		//FIGURE OUT HWY AND SORT IT OUT 16 01 24
 			
 		this.levelMotionTotal = 0; //tracks total motion in a level
+		this.JSONStringHolder = [] //holds onto our JSON files for each level
 
 		//PERMANENT GRAPHICS
 		//Shouldn't be deleted when the scene is cleared.
@@ -84,6 +91,7 @@
 		
 		//KEYBOARD 
 		keyManager = new KeyManager(this);
+	
 		
 		//TESTING BLOCK
 		//For now, this section is used to test generation.
@@ -117,8 +125,6 @@
 		//CURSOR
 		
 		cutCursor = new cutHead(this,level.bloodVessels,lineGraphics,keyManager,5,5,w,h); //places cursor at your mouse position to begin the game
-		
-		
 
 		
 		//TEMPORARY TEXT (TURN INTO BETTER UI LATER)
@@ -140,15 +146,16 @@
 			cutCursor.vessels = level.bloodVessels;
 
 		}
-		
 
 		mainCamera.UpdatePosition();
 		cutCursor.ListenForKeys();
 		cutCursor.ListenForMouse();
 		timerText.setText("Time Elapsed: " + timer.GetLevelTime());
 		mistakeText.setText("Mistakes: " + level.levelRecord.mistakenCuts);
-		
+			
 	}
+		
+	
 
 </script>
 
