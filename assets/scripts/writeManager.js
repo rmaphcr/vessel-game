@@ -8,7 +8,7 @@ class writeManager
 		
 	}
 	
-	writeCSV(arr)
+	prepareCSV(arr)
 	{
 		//function containing the entire process of converting the array to a CSV
 		//where arr is an array of JSON strings created from the same object class
@@ -16,14 +16,12 @@ class writeManager
 		//the first of these inner arrays contains the keys
 		//all arrays afterwards will contain the values
 		
-		
-		let exportArray = [writeHeader(arr)] //begins by writing the header.
+		let exportArray = [this.getHeader(arr)] //begins by writing the header.
 		var currentLine = "";
 		
-		for (var i = 0;i < arr.length() ; i++)
+		for (var i = 0;i < arr.length ; i++)
 		{
-			newLine()	//moves to new line
-			currentLine = writeLine(i);
+			currentLine = this.getLine(arr,i);
 			exportArray.push(currentLine);
 		}
 		
@@ -35,17 +33,22 @@ class writeManager
 		//moves to a new line
 	}
 	
-	writeHeader(arr)
+	getHeader(arr)
 	{
 		//produces the header at the top of the CSV file
 		//parses the first JSON in the array and makes a list of its member keys,to put at the top of the csv
 		//should return an array of the JSON keys
+		
+		console.log(Object.keys(JSON.parse(arr[1])))
+		return Object.keys(JSON.parse(arr[1]))
 	}
 	
-	writeLine(whichIndex)
+	getLine(arr,whichIndex)
 	{
 		//produces a single line, containing info on the JSON object stored at whichIndex
 		//should return a string of this JSON's values in order
+		console.log(Object.values(JSON.parse(arr[whichIndex])))
+		return Object.values(JSON.parse(arr[whichIndex]))
 	}
 	
 	download()

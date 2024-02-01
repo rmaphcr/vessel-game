@@ -75,6 +75,7 @@
 			
 		this.levelMotionTotal = 0; //tracks total motion in a level
 		this.JSONStringHolder = [] //holds onto our JSON files for each level
+		this.writeManager = new writeManager();
 
 		//PERMANENT GRAPHICS
 		//Shouldn't be deleted when the scene is cleared.
@@ -152,7 +153,18 @@
 		cutCursor.ListenForMouse();
 		timerText.setText("Time Elapsed: " + timer.GetLevelTime());
 		mistakeText.setText("Mistakes: " + level.levelRecord.mistakenCuts);
-			
+		
+		//TEMPORARY EXPORT TESTING
+		//at the moment, forms an array of arrays suitable for exporting as a CSV
+		//and then just logs it to console
+		//next step is working out how to actually download it/send it somewhere
+		
+		if (this.JSONStringHolder.length == 3)
+		{
+			let exportCSV = this.writeManager.prepareCSV(this.JSONStringHolder);
+			this.JSONStringHolder = [];
+			console.log(exportCSV);
+		}	
 	}
 		
 	
