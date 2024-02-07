@@ -78,6 +78,10 @@
 		this.width = w;
 		this.height = h;
 		
+		this.sessionID = (Date.now() * Phaser.Math.Between(1,100)).toString()	//RNG and Seeds	//Session ID: exports with level record to keep track of which levels were played together
+		this.RNG = new Phaser.Math.RandomDataGenerator(this.sessionID)			
+		console.log(this.sessionID)													
+		
 		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICS
 		this.vesselGraphics = this.add.graphics(w/2,h/2);			//graphics layer for the blood vessels
 		this.lineGraphics = this.add.graphics(w/2,h/2)				//graphics layer for the cutting head's lines
@@ -94,7 +98,7 @@
 		this.cutCursor = new cutHead(this,5,5,this.width,this.height); 									//places cursor at your mouse position to begin the game		
 		this.levelParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);	//parameters for generating the first level
 		
-		this.camera = new Camera(this,this.levelParams.camSize,false)												//Camera. Currently broken- camera circle isn't following mouse coordinates.
+		this.camera = new Camera(this,this.levelParams.camSize,false)											//Camera. Currently broken- camera circle isn't following mouse coordinates.
 				this.cameraMask = new Phaser.Display.Masks.BitmapMask(this,this.camera.circle)					//Mask. 
 				this.cameraMask.invertAlpha = true;
 		this.screenBlocker = this.add.rectangle(this.width/2, this.height/2, this.width, this.height, 0x000000);				

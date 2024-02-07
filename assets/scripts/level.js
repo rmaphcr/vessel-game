@@ -5,7 +5,7 @@ class level
 	{
 		this.scene = s;
 		this.bloodVessels = []; //list where its blood vessels are stored
-		this.levelRecord = new levelRecord(1);
+		this.levelRecord = new levelRecord(1,s.sessionID);
 		this.vesselHandler = new vesselGenerator(this.scene);
 	}
 

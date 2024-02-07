@@ -2,13 +2,14 @@ class levelRecord
 {
 //this class records exportable stuff in a level: time to completion, no. of mistakes, etc.
 
-	constructor(number)
+	constructor(number,sessionID)
 	
 	{
+		this.sessionID = sessionID;
 		this.number = number;
 		this.mistakenCuts = 0;
 		this.completed = false;
-		this.currentTime = 0; //this changes to match the timer when the level ends
+		this.currentTime = 0; 	//this changes to match the timer when the level ends
 		this.intersections = 0;
 		this.vesselCount = 0;	//how many vessels were in the level
 		this.totalMotion = 0;	//how many pixels were moved by the cutting head in the level
