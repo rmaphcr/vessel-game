@@ -1,31 +1,29 @@
 class level
 {
 
-	constructor(s,v,t,c,cu)
+	constructor(s)
 	{
 		this.scene = s;
 		this.bloodVessels = []; //list where its blood vessels are stored
 		this.levelRecord = new levelRecord(1);
-		this.vesselGraphics = v;
-		this.vesselHandler = new vesselGenerator(this.vesselGraphics);
-		this.timer = t;
-		this.camera = c;
+		this.vesselHandler = new vesselGenerator(this.scene);
 	}
 
-	generate(params)
+	generate(difficulty_range,camsize_range)
 	{
+		let params = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10)
 		
 		//PLACEHOLDER: generating the level
 		
 		//FIRST: CLEAR EVERYTHING
 		this.bloodVessels = [];
 		
-		this.timer.Reset()
-		this.camera.Resize((w/2) * params.camSize);
+		this.scene.timer.Reset()
+		this.scene.camera.Resize((this.scene.width/2) * params.camSize);
 		
-		this.vesselGraphics.clear() //clears the graphics
-		this.vesselGraphics.lineStyle(5, vesselColour, 1.0);
-		this.vesselGraphics.fillStyle(vesselColour, 1.0);
+		this.scene.vesselGraphics.clear() //clears the graphics
+		this.scene.vesselGraphics.lineStyle(5, vesselColour, 1.0);
+		this.scene.vesselGraphics.fillStyle(vesselColour, 1.0);
 		
 		//NOW MAKE A NEW LEVEL
 		
@@ -35,13 +33,18 @@ class level
 		
 			var newVessel = this.vesselHandler.GenerateVessel(targetVessel);
 			
-			newVessel.drawLines(this.scene,this.vesselGraphics);
+			newVessel.drawLines(this.scene);
 			
 			//console.log("vessel generation complete, pushing to array")
 			
 			this.bloodVessels.push(newVessel);
 		}
 		
+	}
+	
+	recordTime()
+	{
+		this.levelRecord.setCurrentTime(this.scene.timer) 
 	}
 	
 	recordResults()
@@ -64,6 +67,12 @@ class level
 		
 		{
 			this.recordMotion();
+		}
+		
+		
+		//GET THE RECORDED TIME FOR THE LEVEL RECORD
+		{
+			this.recordTime()
 		}
 		
 		//EXPORT AND RESET THE LEVEL RECORD

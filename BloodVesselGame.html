@@ -70,89 +70,62 @@
 
 	}
 	
-	function create ()
+	function create()
 	{
+		
+		//trying to consolidate as much stuff as possible, making it members of the scene so I can keep things connected by just passing a reference to the scene
+		
+		this.width = w;
+		this.height = h;
+		
+		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICS
+		this.vesselGraphics = this.add.graphics(w/2,h/2);			//graphics layer for the blood vessels
+		this.lineGraphics = this.add.graphics(w/2,h/2)				//graphics layer for the cutting head's lines
+				this.lineGraphics.lineStyle(5, '0x00c9ff', 1.0);
+				this.lineGraphics.fillStyle('0x00c9ff', 1.0);
 			
-		this.levelMotionTotal = 0; //tracks total motion in a level
-		this.JSONStringHolder = [] //holds onto our JSON files for each level
-		this.writeManager = new writeManager();
+		this.JSONStringHolder = [] 									//holds onto our JSON files for each level	//RECORDS AND EXPORT
+		this.writeManager = new writeManager();						//manages reading and writing
+		this.levelMotionTotal = 0; 									//tracks total motion in a level. Move this somewhere else?	
 
-		//PERMANENT GRAPHICS
-		//Shouldn't be deleted when the scene is cleared.
-		this.add.image(w/2, h/2, 'blood');
+		this.keyManager = new KeyManager(this);															//keeps track of key presses				//MECHANICS
+		this.level = new level(this);																	//holds all the info on a particular level (setup and records)
+		this.timer = new levelTimer(this,clockTick)														//new clock which updates every 500 ms
+		this.cutCursor = new cutHead(this,5,5,this.width,this.height); 									//places cursor at your mouse position to begin the game		
+		this.levelParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);	//parameters for generating the first level
 		
-		//VESSEL GRAPHICS - displays blood vessels only
-		let vesselGraphics = this.add.graphics(w/2,h/2);	
+		this.camera = new Camera(this,this.levelParams.camSize,false)												//Camera. Currently broken- camera circle isn't following mouse coordinates.
+				this.cameraMask = new Phaser.Display.Masks.BitmapMask(this,this.camera.circle)					//Mask. 
+				this.cameraMask.invertAlpha = true;
+		this.screenBlocker = this.add.rectangle(this.width/2, this.height/2, this.width, this.height, 0x000000);				
+				this.screenBlocker.setDepth(1000); //keeps rectangle in front of everything
+				this.screenBlocker.setMask(this.cameraMask);
+		
+		this.timerText = this.add.text(this.width/2, h/4, "Time Elapsed: " + this.timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
+		this.mistakeText = this.add.text(this.width/2, h/5, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
 
-				
-		//CUTTING LINE GRAPHICS - displays cutting lines only
-		let lineGraphics = this.add.graphics(w/2,h/2)
-		lineGraphics.lineStyle(5, '0x00c9ff', 1.0);
-		lineGraphics.fillStyle('0x00c9ff', 1.0);
-		
-		//KEYBOARD 
-		keyManager = new KeyManager(this);
-	
-		
-		//TESTING BLOCK
-		//For now, this section is used to test generation.
-		
-		var testParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
-		
-		//testParams.SetParams(Phaser.Math.Between(1,5));
-		//testParams.camSize = (Phaser.Math.Between(1,10))/10;
-		
-		//CAMERA AND MASK TESTING
-		
-		cameraRadius = (w/2) * testParams.camSize;
-		
-		mainCamera = new Camera(this,cameraRadius,false); 							//camera
-		
-		cameraMask = new Phaser.Display.Masks.BitmapMask(this, mainCamera.circle)	//mask
-		cameraMask.invertAlpha = true;
-		
-		screenBlocker = this.add.rectangle(w/2, h/2, w, h, 0x000000);
-		screenBlocker.setDepth(1000); //keeps rectangle in front of everything
-		screenBlocker.setMask(cameraMask);
-			
-	
-		//LEVEL GENERATION 
-		
-		timer = new levelTimer(this,clockTick) //new clock which updates every 500 ms
-			
-		level = new level(this,vesselGraphics, timer, mainCamera);
-		level.generate(testParams);	//all the creation stuff should be in here
-	
-		//CURSOR
-		
-		cutCursor = new cutHead(this,level.bloodVessels,lineGraphics,keyManager,5,5,w,h); //places cursor at your mouse position to begin the game
+		//STARTING THE GAME
 
-		
-		//TEMPORARY TEXT (TURN INTO BETTER UI LATER)
-		
-		//this.add.text(w/2, h/2, "Difficulty: " + testParams.difficulty, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-		//this.add.text(w/2, h/3, "Camera Size: " + testParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-		timerText = this.add.text(w/2, h/4, "Time Elapsed: " + timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-		mistakeText = this.add.text(w/2, h/5, "Mistakes: " + level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+		this.level.generate(this.testParams);	//all the creation stuff should be in here
 		
 	}
 
 	function update()
 	{
-		if (level.levelRecord.completed == true)
+		if (this.level.levelRecord.completed == true)
 		{
-			var testParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
-			level.recordResults();
-			level.generate(testParams);
-			cutCursor.vessels = level.bloodVessels;
+			this.levelParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
+			this.level.recordResults();
+			this.level.generate(this.levelParams);
+			this.cutCursor.vessels = this.level.bloodVessels;
 
 		}
 
-		mainCamera.UpdatePosition();
-		cutCursor.ListenForKeys();
-		cutCursor.ListenForMouse();
-		timerText.setText("Time Elapsed: " + timer.GetLevelTime());
-		mistakeText.setText("Mistakes: " + level.levelRecord.mistakenCuts);
+		this.camera.UpdatePosition();
+		this.cutCursor.ListenForKeys();
+		this.cutCursor.ListenForMouse();
+		this.timerText.setText("Time Elapsed: " + this.timer.GetLevelTime());
+		this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
 		
 		//TEMPORARY EXPORT TESTING
 		//at the moment, forms an array of arrays suitable for exporting as a CSV

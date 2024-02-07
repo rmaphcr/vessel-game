@@ -3,15 +3,15 @@
 class bloodVessel
 	
 	{
-		constructor(endPoints,midPoints,endCol1,endCol2,isTarget,graphics)	//(vesselCoordinates object, array, s)
+		constructor(scene,endPoints,midPoints,endCol1,endCol2,isTarget)	
 		{
-			this.endPoints = endPoints;										//vesselCoordinates object 
-			this.midPoints = midPoints; 									//array of integers, where each pair of integers is a midpoint
+			this.endPoints = endPoints;										
+			this.midPoints = midPoints; 									
 			this.endCol1 = endCol1;
 			this.endCol2 = endCol2;
 			
-			this.scene = defaultScene;
-			this.graphics = graphics;
+			this.scene = scene;
+			this.graphics = this.scene.vesselGraphics;
 			
 			this.isTarget = isTarget // true or false. Defines whether or not this blood vessel is the 'chosen one'
 		}
@@ -59,14 +59,14 @@ class bloodVessel
 			}
 		}
 		
-		drawLines(scene,graphics)
+		drawLines(scene)
 		{
-			this.graphics.fillStyle(this.endCol1, 1.0);	
-			this.graphics.fillCircle(this.endPoints.point1.x,this.endPoints.point1.y, endPointSize);
-			this.graphics.fillStyle(this.endCol2, 1.0);	
-			this.graphics.fillCircle(this.endPoints.point2.x,this.endPoints.point2.y, endPointSize); 
+			this.scene.vesselGraphics.fillStyle(this.endCol1, 1.0);	
+			this.scene.vesselGraphics.fillCircle(this.endPoints.point1.x,this.endPoints.point1.y, endPointSize);
+			this.scene.vesselGraphics.fillStyle(this.endCol2, 1.0);	
+			this.scene.vesselGraphics.fillCircle(this.endPoints.point2.x,this.endPoints.point2.y, endPointSize); 
 			
-			this.graphics.fillStyle(vesselColour, 1.0) //reset fill col
+			this.scene.vesselGraphics.fillStyle(vesselColour, 1.0) //reset fill col
 			
 			var splinePoints = [];
 			
@@ -125,13 +125,13 @@ class bloodVessel
 			if (this.isTarget == true) //if this is the correct blood vessel
 			{
 				console.log("This was the target blood vessel.")
-				level.levelRecord.complete();
+				this.scene.level.levelRecord.complete();
 			}
 			
 			else
 			{
 				console.log("This was not the target blood vessel.")
-				level.levelRecord.incrementMistakes();
+				this.scene.level.levelRecord.incrementMistakes();
 			}
 
 		}

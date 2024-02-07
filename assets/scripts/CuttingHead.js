@@ -3,20 +3,18 @@ class cutHead
 	
 	//This class implements the cutting head.
 	
-	constructor(scene,vessels,graphics,keymanager,size,speed,x_max,y_max)
+	constructor(scene,size,speed,x_max,y_max)
 	{
 	
 		this.scene = scene; //the scene to which the cutting head is bound. Usually "this".
 		
-		this.vessels = vessels //the scene's list of blood vessels
-		
-		this.graphics = graphics; //the graphics layer which this cutting head draws on (used for line display)
+		this.graphics = this.scene.lineGraphics; //the graphics layer which this cutting head draws on (used for line display)
 	
 		this.size = size;	//the size (radius of circle for now) of the object
 		
-		this.keymanager = keymanager;	//the key manager responsible for handling this cut head
+		this.keyManager = this.scene.keyManager;	//the key manager responsible for handling this cut head
 	
-		this.object = scene.add.circle(game.input.mousePointer.x,game.input.mousePointer.y,this.size,'0xffffff'); //the game object associated with this cutting head
+		this.object = this.scene.add.circle(game.input.mousePointer.x,game.input.mousePointer.y,this.size,'0xffffff'); //the game object associated with this cutting head
 		
 		this.speed = speed;	//the speed (in pixels per frame) which the cutting head moves at when a button is held down
 		
@@ -51,14 +49,14 @@ class cutHead
 	{
 		if (game.input.activePointer.leftButtonDown() == true)	//if left click is being held down
 		{
-			this.graphics.clear();
+			this.scene.lineGraphics.clear();
 			//console.log("cutting");
 			
 			if (this.leftClicking == false) //first frame where click is detected
 			{
 				this.DesignateCutStart();	//tells the game a cut is beginning
-				this.graphics.moveTo();
-				this.graphics.beginPath();
+				this.scene.lineGraphics.moveTo();
+				this.scene.lineGraphics.beginPath();
 				this.StartLine();
 
 			}
@@ -82,25 +80,25 @@ class cutHead
 	
 	{
 			
-		if(this.keymanager.arrows.left.isDown & this.object.x >= this.speed)
+		if(this.keyManager.arrows.left.isDown & this.object.x >= this.speed)
 		{
 			this.object.x -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
 		}
 			
-		else if(this.keymanager.arrows.right.isDown & this.object.x <= this.x_max-this.speed)
+		else if(this.keyManager.arrows.right.isDown & this.object.x <= this.x_max-this.speed)
 		{
 			this.object.x += this.speed;
 			this.scene.levelMotionTotal += this.speed;
 		}
 		
-		if(this.keymanager.arrows.up.isDown & this.object.y >= this.speed)
+		if(this.keyManager.arrows.up.isDown & this.object.y >= this.speed)
 		{
 			this.object.y -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
 		}
 			
-		else if(this.keymanager.arrows.down.isDown & this.object.y <= this.y_max-this.speed)
+		else if(this.keyManager.arrows.down.isDown & this.object.y <= this.y_max-this.speed)
 		{
 			this.object.y += this.speed;
 			this.scene.levelMotionTotal += this.speed;
@@ -167,16 +165,18 @@ class cutHead
 		//console.log("(x: " + this.line.x1 + ",y: " + this.line.y1 + ") AND ")
 		//console.log("(x: " + this.line.x2 + ",y: " + this.line.y2 + ")")
 		
-		for (var i = 0;i < this.vessels.length;i++) //for each blood vessel in the scene
+		//console.log(this.scene.level.bloodVessels)
+		
+		for (var i = 0;i < this.scene.level.bloodVessels.length;i++) //for each blood vessel in the scene
 		{
 			//console.log("checking blood vessel " + i)
-			for (var j = 0; j< this.vessels[i].segments.length;j++) //for each line segment in vessel
+			for (var j = 0; j< this.scene.level.bloodVessels[i].segments.length;j++) //for each line segment in vessel
 			{
 				//console.log("checking blood vessel " + i + " segment " + j);
-				if (Phaser.Geom.Intersects.LineToLine(this.line,this.vessels[i].segments[j])) //if segment and cut line intersect
+				if (Phaser.Geom.Intersects.LineToLine(this.line,this.scene.level.bloodVessels[i].segments[j])) //if segment and cut line intersect
 				{
 					//console.log("Cut detected in blood vessel " + i + ", segment " + j + "!") //placeholder line to show functionality
-					this.vessels[i].Cut() //calls cut method of vessel
+					this.scene.level.bloodVessels[i].Cut() //calls cut method of vessel
 					break;	//stops multiple cuts of the same segment counting as multiple mistakes, by breaking the segment loop 
 				}
 			}

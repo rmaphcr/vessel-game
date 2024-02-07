@@ -27,7 +27,6 @@ class levelRecord
 	complete()
 	{
 		this.completed = true;
-		this.setCurrentTime(timer)
 	}
 	
 	setCurrentTime(timer)
