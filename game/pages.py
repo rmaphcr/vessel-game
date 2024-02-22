@@ -13,3 +13,7 @@ def about():
 @bp.route("/game")
 def game():
 	return render_template("pages/BloodVesselGame.html")
+
+@bp.route("/consent")
+def consent():
+	return render_template("pages/consent.html")
