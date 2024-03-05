@@ -1,0 +1,160 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Blood Vessel Generation Demo</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+   
+   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+   <li><a href="{{ url_for('pages.home') }}">Quit</a></li>
+    
+</head>
+<body>
+
+<script type="text/javascript">
+
+	var config = {
+		type: Phaser.AUTO,
+		width: 612,
+		height: 612,
+		physics: {
+			default: 'arcade',
+			arcade: {
+				debug: true,
+				gravity:
+				{
+					y:0
+				}
+			}
+		},
+		scene: {
+			preload: preload,
+			create: create,
+			update: update
+		}
+	};
+
+	var game = new Phaser.Game(config);
+
+	
+	// TO DO
+	//insert code here to send the JSONs somewhere, download them or whatever. Produce a CSV and download it for now?
+	//next task: produce a class 'writeManager' which converts the list of JSONS into a csv, where each row is a JSON, and the columns are its member data.
+	//also: try working out how to generate levels with a particular seed
+	
+
+	function preload()
+	{
+		defaultScene = this;
+		
+		//loading permanent graphics assets
+		this.load.image('blood', '/static/assets/images/blood.jpg');
+		
+		//loading global variables
+		this.load.script('s_globals','/static/assets/scripts/Globals.js');
+		//loading classes
+		this.load.script('s_LevelParams','/static/assets/scripts/LevelParams.js');
+		this.load.script('s_Point','/static/assets/scripts/Point.js');
+		this.load.script('s_VesselCoordinates','/static/assets/scripts/VesselCoordinates.js');
+		this.load.script('s_BloodVessel','/static/assets/scripts/BloodVessel.js');
+		this.load.script('s_PointGenerator','/static/assets/scripts/PointGenerator.js');
+		this.load.script('s_VesselGenerator','/static/assets/scripts/VesselGenerator.js');
+		this.load.script('s_Camera','/static/assets/scripts/Camera.js');
+		this.load.script('s_LevelTimer','/static/assets/scripts/LevelTimer.js');
+		this.load.script('s_CutCursor','/static/assets/scripts/CuttingHead.js');
+		this.load.script('s_KeyManager','/static/assets/scripts/KeyManager.js');
+		this.load.script('s_LevelRecord','/static/assets/scripts/levelRecord.js');
+		this.load.script('s_Level','/static/assets/scripts/level.js');
+		this.load.script('s_WriteManager','/static/assets/scripts/writeManager.js');
+
+	}
+	
+	function create()
+	{
+		
+		//trying to consolidate as much stuff as possible, making it members of the scene so I can keep things connected by just passing a reference to the scene
+		
+		this.width = w;
+		this.height = h;
+		
+		this.sessionID = (Date.now() * Phaser.Math.Between(1,100)).toString()	//RNG and Seeds	//Session ID: exports with level record to keep track of which levels were played together
+		this.RNG = new Phaser.Math.RandomDataGenerator(this.sessionID)			
+		console.log(this.sessionID)													
+		
+		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICS
+		this.vesselGraphics = this.add.graphics(w/2,h/2);			//graphics layer for the blood vessels
+		this.lineGraphics = this.add.graphics(w/2,h/2)				//graphics layer for the cutting head's lines
+				this.lineGraphics.lineStyle(5, '0x00c9ff', 1.0);
+				this.lineGraphics.fillStyle('0x00c9ff', 1.0);
+			
+		this.JSONStringHolder = [] 									//holds onto our JSON files for each level	//RECORDS AND EXPORT
+		this.writeManager = new writeManager();						//manages reading and writing
+		this.levelMotionTotal = 0; 									//tracks total motion in a level. Move this somewhere else?	
+
+		this.keyManager = new KeyManager(this);															//keeps track of key presses				//MECHANICS
+		this.level = new level(this);																	//holds all the info on a particular level (setup and records)
+		this.timer = new levelTimer(this,clockTick)														//new clock which updates every 500 ms
+		this.cutCursor = new cutHead(this,5,5,this.width,this.height); 									//places cursor at your mouse position to begin the game		
+		this.levelParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);	//parameters for generating the first level
+		
+		this.camera = new Camera(this,this.levelParams.camSize,false)											//Camera. Currently broken- camera circle isn't following mouse coordinates.
+				this.cameraMask = new Phaser.Display.Masks.BitmapMask(this,this.camera.circle)					//Mask. 
+				this.cameraMask.invertAlpha = true;
+		this.screenBlocker = this.add.rectangle(this.width/2, this.height/2, this.width, this.height, 0x000000);				
+				this.screenBlocker.setDepth(1000); //keeps rectangle in front of everything
+				this.screenBlocker.setMask(this.cameraMask);
+		
+		this.timerText = this.add.text(this.width/2, h/4, "Time Elapsed: " + this.timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
+		this.mistakeText = this.add.text(this.width/2, h/5, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
+
+		//STARTING THE GAME
+
+		this.level.generate(this.testParams);	//all the creation stuff should be in here
+	
+		//DATABASE TESTING
+		//in this section, I'll try to send stuff to my firestore database
+
+		
+	}
+
+	function update()
+	{
+		if (this.level.levelRecord.completed == true)
+		{
+			this.levelParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
+			this.level.recordResults();
+			this.level.generate(this.levelParams);
+			this.cutCursor.vessels = this.level.bloodVessels;
+
+		}
+
+		this.camera.UpdatePosition();
+		this.cutCursor.ListenForKeys();
+		this.cutCursor.ListenForMouse();
+		this.timerText.setText("Time Elapsed: " + this.timer.GetLevelTime());
+		this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
+		
+		//TEMPORARY EXPORT TESTING
+		//at the moment, forms an array of arrays suitable for exporting as a CSV
+		//and then just logs it to console
+		//next step is working out how to actually download it/send it somewhere
+		
+		if (this.JSONStringHolder.length == 3)
+		{
+			let exportCSV = this.writeManager.prepareCSV(this.JSONStringHolder);
+			this.JSONStringHolder = [];
+			console.log(exportCSV);
+		}	
+	}
+		
+	
+
+</script>
+
+</body>
+</html>

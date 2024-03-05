@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+
+  <h2>{% block title %}Consent Form{% endblock title %}</h2>
+  <h2>Before playing, please fill out our consent form. </h2>
+  <h2>[Currently unfinished: get tickboxes working] </h2>
+
+{% endblock header %}
+
+
+{% block content %}
+
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<style type="text/css">
+		@page { size: 21cm 29.7cm; margin: 2.54cm }
+		p { line-height: 115%; text-align: left; orphans: 2; widows: 2; margin-bottom: 0.25cm; direction: ltr; background: transparent }
+		a:link { color: #000080; text-decoration: underline }
+	</style>
+</head>
+<body lang="en-GB" link="#000080" vlink="#800000" dir="ltr"><p style="line-height: 100%; margin-bottom: 0cm">
+<img src="/static/assets/images/UCLbanner.png" name="Picture 2" align="bottom" width="903" height="173" border="0"/>
+</p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>CONSENT
+FORM </b></font></font></font>
+</p>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+</p>
+
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">Please
+</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">read
+and understand the information sheet before filling in this form.</font></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+</p>
+
+<li><a href="{{ url_for('pages.about') }}">INFORMATION SHEET</a></li>
+
+
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>Title
+of Study: </b></font></font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>A
+serious game to study the effect of limited field of view in keyhole
+surgery.</b></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>Department:
+</b></font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">UCL
+Medical Physics and Biomedical Engineering</font></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>Researcher(s):</b></font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">
+</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">Connor
+</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">Creasey</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">
+(</font></font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">rmap</font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">hcr</font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">@ucl.ac.uk</font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">)</font></font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">,
+</font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">Stephen
+Thompson (</font></font></font><a href="mailto:s.thompson@ucl.ac.uk" target="_blank"><font color="#0563c1"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><u>s.thompson@ucl.ac.uk</u></font></font></font></a><font face="Arial, serif"><font size="2" style="font-size: 10pt">)</font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>Principal
+Researcher:</b></font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">
+Matthew J. Clarkson (</font></font></font><a href="mailto:m.clarkson@ucl.ac.uk"><font color="#0563c1"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><u>m.clarkson@ucl.ac.uk</u></font></font></font></a><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">)
+– contact with any issues.</font></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>UCL
+Data Protection Officer: </b></font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">Spenser
+Crouch (</font></font></font><a href="mailto:data-protection@ucl.ac.uk" target="_blank"><font color="#0563c1"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><u>data-protection@ucl.ac.uk</u></font></font></font></a><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">)</font></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">This
+study has been approved by the UCL Research Ethics Committee: Project
+ID number: </font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>24249/00</b></font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt"><b>5</b></font></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">Thank
+you for considering taking part in this research. If you have any
+questions arising from the Information Sheet, please contact the
+Principal Researcher.</font></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style="line-height: 100%; margin-bottom: 0cm"><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">B</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">y
+ticking each box below, </font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">you</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">
+a</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">re</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">
+consenting to this element of the study. </font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">U</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">nticked
+boxes mean that </font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">you
+</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">DO
+NOT consent to that part of the study. </font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">B</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">y
+not giving consent for certain elements, </font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">you</font></font></font><font color="#000000"><font face="Arial, serif"><font size="2" style="font-size: 10pt">
+may be deemed ineligible for the study.</font></font></font></p>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+</p>
+<center>
+	<table width="906" cellpadding="1" cellspacing="0">
+		<col width="80"/>
+
+		<col width="753"/>
+
+		<col width="63"/>
+
+		<tr valign="top">
+			<td width="80" height="26" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">Tick</font></font></p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">1.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				confirm that I have read and understood the Information Sheet for
+				the above study. I have had an opportunity to consider the
+				information and understand what will be expected of me, and that
+				if I had any questions they have been answered to my
+				satisfaction. </font></font>
+				</p>
+				<p style="orphans: 0; widows: 0; margin-bottom: 0cm"><br/>
+
+				</p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<br/>
+
+				</p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">2.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				understand that data will be anonymised, and that it will not be
+				possible to link my personal data (consent, contact details) with
+				the study data. I understand that according to data protection
+				legislation, ‘task in the public interest’ will be the lawful
+				basis for processing.</font></font></p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">3.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				understand that all personal information will remain
+				confidential, and that all efforts will be made to ensure I
+				cannot be identified</font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt"><i>.</i></font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">
+				Data gathered in this study will be stored anonymously. It will
+				not be possible to identify me in any publications.</font></font></p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				      <font face="Arial, serif"><font size="2" style="font-size: 11pt">4.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				understand that I will not be able to withdraw from the study
+				after the point of data collection. This is due to the data being
+				anonymous.</font></font></p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">5.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				understand that my information may be subject to review by
+				responsible individuals from the University for monitoring and
+				audit purposes.</font></font></p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">6.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				understand that I will not benefit financially from this study or
+				from any possible outcome it may result in in the future.</font></font></p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">7.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				understand that I will not be compensated for the portion of time
+				spent in the study if I choose to withdraw.</font></font></p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">8.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				agree that my anonymised research data may be used by others for
+				future research. </font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">(</font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">No
+				one will be able to identify you when this data is shared.</font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">)</font></font></p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="28" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">9.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				understand that the information I have submitted will be
+				published as a report, </font></font><font face="Arial, serif"><font size="2" style="font-size: 10pt">which
+				the researchers involved will make available upon request.</font></font></p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="80" height="26" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-left: 0.64cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 11pt">10.</font></font></p>
+			</td>
+			<td width="753" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0; margin-bottom: 0cm">
+				<font face="Arial, serif"><font size="2" style="font-size: 10pt">I
+				am aware of who I should contact if I wish to lodge a complaint.</font></font></p>
+				<p style="orphans: 0; widows: 0"><br/>
+
+				</p>
+			</td>
+			<td width="63" style="background: transparent; border: 0.75pt solid #000000; padding: 0cm 0.01cm"><p style="orphans: 0; widows: 0">
+				<br/>
+
+				</p>
+			</td>
+		</tr>
+	</table>
+</center>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+</p>
+<p style="line-height: 100%; margin-bottom: 0cm"><br/>
+
+<li><a href="{{ url_for('pages.game') }}">Play the blood vessel game!</a></li>
+
+</p>
+</body>
+</html>
+
+
+
+{% endblock content %}
