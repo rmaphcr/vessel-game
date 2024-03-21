@@ -1,0 +1,10 @@
+cff-version: 0.1.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Creasey"
+  given-names: "Connor"
+title: "Vessel-game"
+version: 0.1.0
+doi: 10.5281/zenodo.10849355
+date-released: 2024-03-21
+url: "https://github.com/rmaphcr/vessel-game"
