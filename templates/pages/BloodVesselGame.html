@@ -78,7 +78,6 @@
 	{
 		
 		//trying to consolidate as much stuff as possible, making it members of the scene so I can keep things connected by just passing a reference to the scene
-		
 		this.width = w;
 		this.height = h;
 		
@@ -97,11 +96,13 @@
 		this.levelMotionTotal = 0; 									//tracks total motion in a level. Move this somewhere else?	
 
 		this.keyManager = new KeyManager(this);															//keeps track of key presses				//MECHANICS
-		this.level = new level(this);																	//holds all the info on a particular level (setup and records)
+		this.levelParams = new levelParams(Phaser.Math.Between(dmin,dmax),Phaser.Math.Between(cmin*10,cmax*10)/10);	//parameters for generating the first level
 		this.timer = new levelTimer(this,clockTick)														//new clock which updates every 500 ms
 		this.cutCursor = new cutHead(this,5,5,this.width,this.height); 									//places cursor at your mouse position to begin the game		
-		this.levelParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);	//parameters for generating the first level
+		console.log(this.levelParams)
 		
+		this.level = new level(this);																	//holds all the info on a particular level (setup and records)
+				
 		this.camera = new Camera(this,this.levelParams.camSize,false)											//Camera. Currently broken- camera circle isn't following mouse coordinates.
 				this.cameraMask = new Phaser.Display.Masks.BitmapMask(this,this.camera.circle)					//Mask. 
 				this.cameraMask.invertAlpha = true;
@@ -111,13 +112,11 @@
 		
 		this.timerText = this.add.text(this.width/2, h/4, "Time Elapsed: " + this.timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
 		this.mistakeText = this.add.text(this.width/2, h/5, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
+		this.fovText = this.add.text(this.width/2, h/3, "Camera size: " + this.levelParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
 
 		//STARTING THE GAME
 
 		this.level.generate(this.testParams);	//all the creation stuff should be in here
-	
-		//DATABASE TESTING
-		//in this section, I'll try to send stuff to my firestore database
 
 		
 	}
@@ -126,9 +125,9 @@
 	{
 		if (this.level.levelRecord.completed == true)
 		{
-			this.levelParams = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10);
 			this.level.recordResults();
-			this.level.generate(this.levelParams);
+			this.levelParams = new levelParams(Phaser.Math.Between(dmin,dmax),Phaser.Math.Between(cmin*10,cmax*10)/10)
+			this.level.generate();
 			this.cutCursor.vessels = this.level.bloodVessels;
 
 		}
@@ -138,11 +137,13 @@
 		this.cutCursor.ListenForMouse();
 		this.timerText.setText("Time Elapsed: " + this.timer.GetLevelTime());
 		this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
+		this.fovText.setText("Camera size: " + this.level.levelRecord.fov);
 		
 		//TEMPORARY EXPORT TESTING
 		//at the moment, forms an array of arrays suitable for exporting as a CSV
 		//and then just logs it to console
 		//next step is working out how to actually download it/send it somewhere
+		//note: not currently used, since I worked out the cloud stuff
 		
 		if (this.JSONStringHolder.length == 3)
 		{

@@ -1,0 +1,5 @@
+make sure to remove service keys on the version uploaded to github. Add relevant stuff to .gitignore.
+
+and before uploading to google cloud, remove all the service key stuff in general- it's just for local testing. Cloud should be able to automatically access the database. See this link in case any further adjustment is needed: https://firebase.google.com/docs/firestore/quickstart
+
+make sure to update dependencies before google cloud upload as well

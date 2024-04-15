@@ -3,6 +3,12 @@
 	let w = config.width; 				//integer, width of game screen
 	let h = config.height; 				//integer, height of game screen
 	
+	let dmin = 2;						//min number of vessels
+	let dmax = 5;						//max number of vessels
+	
+	let cmin = 0.3						//max camera size (as proportion of half screen width)
+	let cmax = 1.0						//min camera size (as proportion of half screen width)
+	
 	let clockTick = 500; 				//how often to update clock (in ms)
 	
 	var standardOffset = 30;			//offset of vessel end points from the edge of the screen
@@ -14,3 +20,4 @@
 	var vesselColour = 0x87a7b0;			//colour of blood vessel lines
 	var vesselThickness = 3; 			//thickness of blood vessels
 	var vesselLineSplits = 20; 			//how many line segments in blood vessels
+	

@@ -5,21 +5,20 @@ class level
 	{
 		this.scene = s;
 		this.bloodVessels = []; //list where its blood vessels are stored
-		this.levelRecord = new levelRecord(1,s.sessionID);
+		this.levelRecord = new levelRecord(1,s);
 		this.vesselHandler = new vesselGenerator(this.scene);
 	}
 
-	generate(difficulty_range,camsize_range)
+	generate()
 	{
-		let params = new levelParams((Phaser.Math.Between(1,5)),(Phaser.Math.Between(1,10))/10)
-		
 		//PLACEHOLDER: generating the level
 		
 		//FIRST: CLEAR EVERYTHING
 		this.bloodVessels = [];
 		
 		this.scene.timer.Reset()
-		this.scene.camera.Resize((this.scene.width/2) * params.camSize);
+		console.log(this.scene.levelParams.camSize)
+		this.scene.camera.Resize(this.scene.levelParams.camSize);
 		
 		this.scene.vesselGraphics.clear() //clears the graphics
 		this.scene.vesselGraphics.lineStyle(5, vesselColour, 1.0);
@@ -27,9 +26,9 @@ class level
 		
 		//NOW MAKE A NEW LEVEL
 		
-		for (var i = 0;i < params.difficulty;i++)	//put this inside levelGenerator class?
+		for (var i = 0;i < this.scene.levelParams.difficulty;i++)	//put this inside levelGenerator class?
 		{
-			var targetVessel = (i == params.difficulty - 1) ? (true) : (false); //If this is the last vessel to be placed, tells PlaceVessel that it needs to be real
+			var targetVessel = (i == this.scene.levelParams.difficulty - 1) ? (true) : (false); //If this is the last vessel to be placed, tells PlaceVessel that it needs to be real
 		
 			var newVessel = this.vesselHandler.GenerateVessel(targetVessel);
 			
@@ -45,6 +44,11 @@ class level
 	recordTime()
 	{
 		this.levelRecord.setCurrentTime(this.scene.timer) 
+	}
+	
+	grabFOV()
+	{
+		this.levelRecord.getFOV();
 	}
 	
 	recordResults()
@@ -75,20 +79,53 @@ class level
 			this.recordTime()
 		}
 		
-		//EXPORT AND RESET THE LEVEL RECORD
+		//GET THE CAMERA FOV
+			
+		{
+			this.grabFOV()
+		}
 		
-		this.scene.JSONStringHolder.push(this.levelRecord.createJSON());
+		var levelDict = this.levelRecord.createJSONdict()
+		console.log(levelDict)
+		
+		//EXPORT AND RESET THE LEVEL RECORD
+		//(testing export code)
+		
+		//this block sends JSONs to the firebase database, if exportData == true in scripts/Globals
+		console.log("Writing results")
+		
+		fetch("/dbwrite", {
+      method: "POST",
+      headers: {
+	"Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+	      "sessionID" : levelDict["sessionID"], 
+	      "number" : levelDict["number"], 
+	      "intersections" : levelDict["intersections"],
+	      "FOV": levelDict["FOV"],
+	      "vessels" : levelDict["vessels"],
+	      "mistakes" : levelDict["mistakes"], 
+	      "motion" : levelDict["motion"],
+	      "time" : levelDict["time"]
+      })
+    })
+		
+		
 		this.levelRecord.reset();
 		this.scene.levelMotionTotal = 0; //resets level motion. Yes this code is very poorly organised
-		console.log("ALL JSONS SO FAR:");
-		console.log(this.scene.JSONStringHolder);
-		
-	}
+      
+    }
 	
 	countVessels()
 	{
 		//counts vessels and tells the level record about it
 		this.levelRecord.vesselCount = this.bloodVessels.length;
+	}
+	
+	getFOV()
+	{
+		this.levelRecord.getFOV()
 	}
 	
 	recordMotion()

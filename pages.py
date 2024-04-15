@@ -17,3 +17,4 @@ def game():
 @bp.route("/consent")
 def consent():
 	return render_template("pages/consent.html")
+

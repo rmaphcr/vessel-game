@@ -2,10 +2,11 @@ class levelRecord
 {
 //this class records exportable stuff in a level: time to completion, no. of mistakes, etc.
 
-	constructor(number,sessionID)
+	constructor(number,scene)
 	
 	{
-		this.sessionID = sessionID;
+		this.s = scene;
+		this.sessionID = scene.sessionID;
 		this.number = number;
 		this.mistakenCuts = 0;
 		this.completed = false;
@@ -13,6 +14,7 @@ class levelRecord
 		this.intersections = 0;
 		this.vesselCount = 0;	//how many vessels were in the level
 		this.totalMotion = 0;	//how many pixels were moved by the cutting head in the level
+		this.fov = scene.levelParams.camSize;
 	}
 
 	incrementMistakes()
@@ -35,6 +37,12 @@ class levelRecord
 		this.currentTime = timer.GetLevelTime();
 	}
 	
+	getFOV()
+	{
+		this.fov = this.s.levelParams.camSize;
+		return this.fov;
+	}
+	
 	reset()
 	{
 		this.completed = false;
@@ -44,14 +52,14 @@ class levelRecord
 		this.intersections = 0;
 		this.totalMotion = 0;
 		this.vesselCount = 0;
+		this.fov = 0;
 	}
 	
-	createJSON()
+	createJSONdict()
 	{
-		let levelStringJSON = JSON.stringify(this);
-		console.log("CONVERTING LEVEL RECORD TO JSON FILE:")
-		console.log(levelStringJSON);
-		return levelStringJSON;
+		var levelDict = {"sessionID" : this.sessionID, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion };
+		
+		return levelDict;
 	}
 	
 	consoleDump()

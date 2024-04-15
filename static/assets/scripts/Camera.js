@@ -4,8 +4,8 @@ class Camera
 		constructor(scene,size,mosaic)
 		{
 			this.scene = scene
-			this.size = size;																											//integer. Radius (in pixels) of the circle
-			this.circle = this.scene.add.circle(game.input.mousePointer.worldX, game.input.mousePointer.worldY,this.scene.width * this.size,'0xffffff').setVisible(false);	//circle object.
+			this.size = size;			//should be between 0.1 and 1. Ratio of radius to half screen width
+			this.circle = this.scene.add.circle(game.input.mousePointer.worldX, game.input.mousePointer.worldY,this.size * (this.scene.width/2),'0xffffff').setVisible(false);	//circle object.
 			this.circle.setOrigin(0,0)
 		}
 		
@@ -23,7 +23,7 @@ class Camera
 		UpdateSize()	//updates the camera's size
 		{
 			this.circle.setPosition(game.input.mousePointer.worldX,game.input.mousePointer.worldY)
-			this.circle.radius = this.size;
+			this.circle.radius = this.size * ((this.scene.width)/2);
 			this.circle.setOrigin(0,0)
 		}
 		
