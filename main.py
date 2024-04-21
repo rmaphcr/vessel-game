@@ -34,6 +34,9 @@ app = create_app()
 @app.route("/dbwrite", methods = ['POST'])
 def dbwrite():
 
+	#This function just takes whatever json string it's handed and writes it to the cloud database
+	#No error checking (yet) so just make sure you catch rubbish before it gets here
+
     jsonString = json.dumps(request.json)
     resultJson = json.loads(jsonString)
     
@@ -50,8 +53,8 @@ def dbwrite():
              'FOV' : resultJson.get('FOV')
              }
     
-    ref = db.collection("JSON-strings").add(dbDict)
-    respDict = {"wrote":True}
+    ref = db.collection("JSON-strings").add(dbDict) #Adds the 
+    respDict = {"wrote":True} #Just sends a token response back to the frontend to keep it happy
     return jsonify(respDict)
     
 if __name__ == "__main__":

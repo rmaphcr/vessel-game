@@ -138,24 +138,12 @@
 		this.timerText.setText("Time Elapsed: " + this.timer.GetLevelTime());
 		this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
 		this.fovText.setText("Camera size: " + this.level.levelRecord.fov);
-		
-		//TEMPORARY EXPORT TESTING
-		//at the moment, forms an array of arrays suitable for exporting as a CSV
-		//and then just logs it to console
-		//next step is working out how to actually download it/send it somewhere
-		//note: not currently used, since I worked out the cloud stuff
-		
-		if (this.JSONStringHolder.length == 3)
-		{
-			let exportCSV = this.writeManager.prepareCSV(this.JSONStringHolder);
-			this.JSONStringHolder = [];
-			console.log(exportCSV);
-		}	
 	}
 		
-	
 
 </script>
+
+
 
 </body>
 </html>

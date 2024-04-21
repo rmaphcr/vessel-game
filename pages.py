@@ -18,3 +18,6 @@ def game():
 def consent():
 	return render_template("pages/consent.html")
 
+@bp.route("/instructions")
+def instructions():
+	return render_template("pages/instructions.html")
