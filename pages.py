@@ -21,3 +21,11 @@ def consent():
 @bp.route("/instructions")
 def instructions():
 	return render_template("pages/instructions.html")
+	
+@bp.route("/feedback")
+def feedback():
+	return render_template("pages/feedback.html")
+
+@bp.route("/read_form", methods=['POST'])
+def read_form():
+	return render_template("pages/read_form.html")

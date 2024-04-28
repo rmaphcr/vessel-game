@@ -1,4 +1,4 @@
-from flask import Flask, request, json, jsonify, send_file
+from flask import Flask, request, json, jsonify, send_file, render_template
 
 import pages
 
@@ -53,10 +53,24 @@ def dbwrite():
              'FOV' : resultJson.get('FOV')
              }
     
-    ref = db.collection("JSON-strings").add(dbDict) #Adds the 
+    ref = db.collection("results").add(dbDict) 
     respDict = {"wrote":True} #Just sends a token response back to the frontend to keep it happy
     return jsonify(respDict)
+
+
+@app.route("/dbfeedback", methods = ['POST'])
+def dbfeedback():
+
+	#This function just takes whatever json string it's handed and writes it to the cloud database
+	#No error checking (yet) so just make sure you catch rubbish before it gets here
+	#This one is for the second collection, where feedback is stored
+
+    dbDict = request.form.to_dict()
     
+    ref = db.collection("feedback").add(dbDict) 
+    respDict = {"wrote":True} #Just sends a token response back to the frontend to keep it happy
+    return render_template("pages/read_form.html")
+
 if __name__ == "__main__":
 	
 	app.run()
