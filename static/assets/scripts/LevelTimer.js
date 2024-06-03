@@ -1,8 +1,5 @@
 class levelTimer
 {
-	//I'm struggling to make this work
-	//The clock just refuses to count up
-	
 	constructor(scene,updateInterval)
 	{
 		//updateInterval: how often to update clock (in ms)
@@ -10,6 +7,7 @@ class levelTimer
 		this.clock = new Phaser.Time.Clock(scene); //create timer 
 		this.levelTime = 0;	//
 		this.interval = updateInterval;
+		this.scene = scene
 		
 		this.clock.addEvent({
 		delay:this.interval,
@@ -26,6 +24,7 @@ class levelTimer
 	IncrementLevelTime()
 	{
 		this.levelTime += (this.interval)/1000;
+		this.scene.timeRemaining -= (this.interval)/1000;
 	}
 	
 	Reset()

@@ -41,7 +41,14 @@ class cutHead
 	
 	ResetPosition() 
 	{
-		this.object.setPosition(game.input.mousePointer.x, game.input.mousePointer.y);	//resets location of the cut head to the mouse pointer
+		if (game.input.mousePointer.x <= this.scene.w)
+		{
+			this.object.setPosition(game.input.mousePointer.x, game.input.mousePointer.y);	//resets location of the cut head to the mouse pointer
+		}
+		else
+		{
+			this.object.setPosition(this.scene.w,game.input.mousePointer.y) 				//ensures cursor can't reset onto UI panel
+		}
 	}
 	
 	ListenForMouse()	//listens for mouse input
