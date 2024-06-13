@@ -25,6 +25,7 @@ class levelTimer
 	{
 		this.levelTime += (this.interval)/1000;
 		this.scene.timeRemaining -= (this.interval)/1000;
+		this.scene.idleTracker.increment((this.interval)/1000)
 	}
 	
 	Reset()

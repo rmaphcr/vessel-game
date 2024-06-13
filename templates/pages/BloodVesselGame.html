@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Blood Vessel Generation Demo</title>
+    <title>Blood Vessel Game</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.js"></script>
     <style type="text/css">
         body {
@@ -71,6 +71,7 @@
 		this.load.script('s_LevelRecord','/static/assets/scripts/levelRecord.js');
 		this.load.script('s_Level','/static/assets/scripts/level.js');
 		this.load.script('s_WriteManager','/static/assets/scripts/writeManager.js');
+		this.load.script('s_IdleTracker','/static/assets/scripts/IdleTracker.js')
 
 	}
 	
@@ -94,7 +95,8 @@
 			
 		this.JSONStringHolder = [] 									//holds onto our JSON files for each level	//RECORDS AND EXPORT
 		this.writeManager = new writeManager();						//manages reading and writing
-		this.levelMotionTotal = 0; 									//tracks total motion in a level. Move this somewhere else?	
+		this.levelMotionTotal = 0; 									//tracks total cursor motion in a level. Move this somewhere else?	
+		this.levelMouseMotionTotal = 0;								//tracks total mouse motion in a level. 
 
 		this.keyManager = new KeyManager(this);															//keeps track of key presses				//MECHANICS
 		this.levelParams = new levelParams(Phaser.Math.Between(dmin,dmax),Phaser.Math.Between(cmin*10,cmax*10)/10);	//parameters for generating the first level
@@ -114,6 +116,12 @@
 		this.timerText = this.add.text(this.width + 10, h/3, "Time Elapsed: " + this.timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
 		this.mistakeText = this.add.text(this.width + 10, h/2, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
 		this.fovText = this.add.text(this.width + 10, (2*h)/3, "Camera size: " + this.levelParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
+
+		this.idleTracker = new idleTracker(this); //tracks how long the mouse and keys have been idle.
+
+			//mouse input events
+			
+
 
 		//STARTING THE GAME
 

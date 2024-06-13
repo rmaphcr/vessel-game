@@ -13,6 +13,8 @@
 	
 	let clockTick = 500; 				//how often to update clock (in ms)
 	
+	let idleFlagTime = 5; 				//how many seconds of inactivity before triggering the idle flag for the current level
+	
 	var standardOffset = 30;			//offset of vessel end points from the edge of the screen
 	var endPointSize = 15 				//size of endpoint circles
 	var endPointTrueColour = 0x000000; 	//colour of true endpoints (2 of which connect the target blood vessel)

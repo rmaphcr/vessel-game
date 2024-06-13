@@ -2,6 +2,7 @@ class cutHead
 {
 	
 	//This class implements the cutting head.
+	//manages controls for both the cut head and pointers.
 	
 	constructor(scene,size,speed,x_max,y_max)
 	{
@@ -27,6 +28,14 @@ class cutHead
 		this.ResetPosition(); //starts the cuthead cursor at the mouse location
 		
 		this.line = new Phaser.Geom.Line(0,0,this.object.x,this.object.y,this.object.x,this.object.y); //initiates cut line. The coordinates will update during clicking
+	
+		this.scene.input.on('pointermove', function (pointer)
+        {
+
+			//does whatever is in this block, whenever the mouse moves
+			this.scene.idleTracker.reset(); //resets the idle time when mouse is moved. Note cuttingHead also does this when keys are pressed.
+
+        }, this);
 	}
 	
 	GoWhite()
@@ -65,6 +74,8 @@ class cutHead
 				this.scene.lineGraphics.moveTo();
 				this.scene.lineGraphics.beginPath();
 				this.StartLine();
+				
+				this.scene.idleTracker.reset();  //activity
 
 			}
 			
@@ -80,6 +91,8 @@ class cutHead
 			
 			this.DesignateCutEnd();	//tells the game a cut is ending, starts line placement chain
 			this.ResetCutLocation();	//resets the location of the cut coordinates to 0
+			
+			this.scene.idleTracker.reset(); 
 		}
 	}
 	
@@ -91,24 +104,28 @@ class cutHead
 		{
 			this.object.x -= this.speed; 
 			this.scene.levelMotionTotal += this.speed;
+			this.scene.idleTracker.reset(); 
 		}
 			
 		else if((this.keyManager.arrows.right.isDown||this.keyManager.D.isDown) && this.object.x <= this.x_max-this.speed) //Move right
 		{
 			this.object.x += this.speed;
 			this.scene.levelMotionTotal += this.speed;
+			this.scene.idleTracker.reset(); 
 		}
 		
 		if((this.keyManager.arrows.up.isDown||this.keyManager.W.isDown) && this.object.y >= this.speed) //Move up
 		{
 			this.object.y -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
+			this.scene.idleTracker.reset(); 
 		}
 			
 		else if((this.keyManager.arrows.down.isDown||this.keyManager.S.isDown) && this.object.y <= this.y_max-this.speed) //Move down
 		{
 			this.object.y += this.speed;
 			this.scene.levelMotionTotal += this.speed;
+			this.scene.idleTracker.reset(); 
 		}
 						
 		

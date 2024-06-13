@@ -15,6 +15,7 @@ class levelRecord
 		this.vesselCount = 0;	//how many vessels were in the level
 		this.totalMotion = 0;	//how many pixels were moved by the cutting head in the level
 		this.fov = scene.levelParams.camSize;
+		this.idleFlag = false 	//if this is true, there was inactivity by the player for more than the idleFlagTime specified in Globals. Makes it easier to identify & throw out useless data
 	}
 
 	incrementMistakes()
@@ -26,6 +27,12 @@ class levelRecord
 	{
 		this.timeElapsed += howMuch;
 	}
+	
+	setIdle()
+	{
+		this.idleFlag = true;	//flags the level to denote the player was idle for more than the designated idle time
+	}
+	
 	
 	complete()
 	{
@@ -53,11 +60,12 @@ class levelRecord
 		this.totalMotion = 0;
 		this.vesselCount = 0;
 		this.fov = 0;
+		this.idleFlag = false;
 	}
 	
 	createJSONdict()
 	{
-		var levelDict = {"sessionID" : this.sessionID, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion };
+		var levelDict = {"sessionID" : this.sessionID, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion, "idleFlag" : this.idleFlag };
 		
 		return levelDict;
 	}
@@ -70,5 +78,6 @@ class levelRecord
 		console.log("Completion time : " + this.currentTime + " seconds")
 		console.log("Mistakes : " + this.mistakenCuts)
 		console.log("Movement : " + this.totalMotion + " pixels")
+		console.log("Idle flag triggered : " + this.idleFlag) 
 	}
 }
