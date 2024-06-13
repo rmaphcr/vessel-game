@@ -50,7 +50,9 @@ def dbwrite():
              'intersections' : resultJson.get('intersections'),
              'vessels' : resultJson.get('vessels'),
              'motion': resultJson.get('motion'),
-             'FOV' : resultJson.get('FOV')
+             'mouseMotion': resultJson.get('mouseMotion'),
+             'FOV' : resultJson.get('FOV'),
+             'idleFlag': resultJson.get('idleFlag')
              }
     
     ref = db.collection("results").add(dbDict) 

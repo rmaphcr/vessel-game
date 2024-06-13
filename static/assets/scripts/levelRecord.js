@@ -5,6 +5,13 @@ class levelRecord
 	constructor(number,scene)
 	
 	{
+		
+		//if you add something new here that you want exported
+		//remember to add it to the levelRecord.reset(), levelRecord.createJSONdict() and level.recordResults() functions
+		// plus your backend route for exporting to the database!
+		//I'm aware this is annoying, if you're reading this then I didn't get a chance to clean it up
+		//Ideally, I'd want to define all the fields in one place (Globals?) so they're easier to change
+		
 		this.s = scene;
 		this.sessionID = scene.sessionID;
 		this.number = number;
@@ -14,8 +21,9 @@ class levelRecord
 		this.intersections = 0;
 		this.vesselCount = 0;	//how many vessels were in the level
 		this.totalMotion = 0;	//how many pixels were moved by the cutting head in the level
+		this.mouseMotion = 0; 	// (approximately) how much the mouse was moved in the level (pixels)
 		this.fov = scene.levelParams.camSize;
-		this.idleFlag = false 	//if this is true, there was inactivity by the player for more than the idleFlagTime specified in Globals. Makes it easier to identify & throw out useless data
+		this.idleFlag = false; 	//if this is true, there was inactivity by the player for more than the idleFlagTime specified in Globals. Makes it easier to identify & throw out useless data
 	}
 
 	incrementMistakes()
@@ -26,6 +34,13 @@ class levelRecord
 	incrementTime(howMuch)
 	{
 		this.timeElapsed += howMuch;
+	}
+	
+	incrementMouseMotion(amount)
+	{
+		//this gets called by the Camera class, seemed the easiest way to do it and it should be roughly accurate
+		
+		this.mouseMotion += amount;
 	}
 	
 	setIdle()
@@ -52,12 +67,16 @@ class levelRecord
 	
 	reset()
 	{
+		
+	//called by level class each time a new level is generated, after data is exported
+		
 		this.completed = false;
 		this.number += 1;
 		this.mistakenCuts = 0;
 		this.currentTime = 0;
 		this.intersections = 0;
 		this.totalMotion = 0;
+		this.mouseMotion = 0;
 		this.vesselCount = 0;
 		this.fov = 0;
 		this.idleFlag = false;
@@ -65,7 +84,7 @@ class levelRecord
 	
 	createJSONdict()
 	{
-		var levelDict = {"sessionID" : this.sessionID, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion, "idleFlag" : this.idleFlag };
+		var levelDict = {"sessionID" : this.sessionID, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion, "mouseMotion" : this.mouseMotion, "idleFlag" : this.idleFlag };
 		
 		return levelDict;
 	}
@@ -78,6 +97,7 @@ class levelRecord
 		console.log("Completion time : " + this.currentTime + " seconds")
 		console.log("Mistakes : " + this.mistakenCuts)
 		console.log("Movement : " + this.totalMotion + " pixels")
+		console.log("Mouse movement :" + this.mouseMotion + "pixels")
 		console.log("Idle flag triggered : " + this.idleFlag) 
 	}
 }

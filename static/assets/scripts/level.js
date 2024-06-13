@@ -107,7 +107,9 @@ class level
 	      "vessels" : levelDict["vessels"],
 	      "mistakes" : levelDict["mistakes"], 
 	      "motion" : levelDict["motion"],
-	      "time" : levelDict["time"]
+	      "mouseMotion": levelDict["mouseMotion"],
+	      "time" : levelDict["time"],
+	      "idleFlag":levelDict["idleFlag"]
       })
     })
 		
