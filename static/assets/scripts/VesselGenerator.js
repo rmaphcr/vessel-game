@@ -22,13 +22,13 @@ class vesselGenerator //this class's methods are called to generate blood vessel
 				
 			else
 			{
-				if (Phaser.Math.Between(1,3) == 3) 	//1 in 3 chance of decoy vessel having one "true" end 
+				if (this.scene.RNG.between(1,3) == 3) 	//1 in 3 chance of decoy vessel having one "true" end 
 				{
 					endCol1 = endPointTrueColour;
 				}
 			}
 				
-			let generator = new pointGenerator();
+			let generator = new pointGenerator(this.scene);
 			let endPoints = generator.GenerateEndPoints(); 			//array containing the end points
 			let midPoints = generator.GenerateMidPoints(endPoints); //array containing the mid points
 

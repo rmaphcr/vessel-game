@@ -63,6 +63,7 @@ class cutHead
 	ListenForMouse()	//listens for mouse input
 	
 	{
+		
 		if (game.input.activePointer.leftButtonDown() == true)	//if left click is being held down
 		{
 			this.scene.lineGraphics.clear();

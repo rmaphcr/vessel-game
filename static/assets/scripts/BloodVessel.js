@@ -41,8 +41,8 @@ class bloodVessel
 		{
 			for (var i = 0;i<this.midPoints.length;i++)
 			{
-				this.midPoints[i].x += Phaser.Math.Between(-maximum,maximum);
-				this.midPoints[i].y += Phaser.Math.Between(-maximum,maximum);
+				this.midPoints[i].x += this.scene.RNG.between(-maximum,maximum);
+				this.midPoints[i].y += this.scene.RNG.between(-maximum,maximum);
 				
 				if (Math.abs(this.midPoints[i].x) >= w)
 					{

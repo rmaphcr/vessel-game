@@ -44,6 +44,7 @@ def dbwrite():
 
     dbDict = {
              'session ID' : resultJson.get('sessionID'),
+             'seed' : resultJson.get('seed'),
              'number' : resultJson.get('number'),
              'mistakes' : resultJson.get('mistakes'),
              'time' : resultJson.get('time'),

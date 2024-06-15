@@ -14,6 +14,7 @@ class levelRecord
 		
 		this.s = scene;
 		this.sessionID = scene.sessionID;
+		this.seed = scene.RNGManager.lastSeed;
 		this.number = number;
 		this.mistakenCuts = 0;
 		this.completed = false;
@@ -71,6 +72,7 @@ class levelRecord
 	//called by level class each time a new level is generated, after data is exported
 		
 		this.completed = false;
+		this.seed = this.s.RNGManager.lastSeed;
 		this.number += 1;
 		this.mistakenCuts = 0;
 		this.currentTime = 0;
@@ -84,7 +86,7 @@ class levelRecord
 	
 	createJSONdict()
 	{
-		var levelDict = {"sessionID" : this.sessionID, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion, "mouseMotion" : this.mouseMotion, "idleFlag" : this.idleFlag };
+		var levelDict = {"sessionID" : this.sessionID, "seed" : this.seed, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion, "mouseMotion" : this.mouseMotion, "idleFlag" : this.idleFlag };
 		
 		return levelDict;
 	}

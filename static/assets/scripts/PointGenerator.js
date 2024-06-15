@@ -1,13 +1,14 @@
 	class pointGenerator // This class's purpose is to generate a pair of points within a specified screen boundary. 
 	{
 		
-		constructor()
+		constructor(scene)
 		{
 			//below members define the area the generator draws points within. Screen size with offset buffer by default.
 			this.boundaryX1 = standardOffset;
 			this.boundaryX2 = w - standardOffset;
 			this.boundaryY1 = standardOffset;
 			this.boundaryY2 = h - standardOffset;
+			this.scene = scene
 		}
 		
 		GenerateEndPoints()
@@ -17,7 +18,7 @@
 			
 			var coords = new vesselCoordinates();
 			
-			const whichEdge = Phaser.Math.Between(1,2);	//Flips a coin to determine whether the vessel is generated spanning top and bottom, or left and right
+			const whichEdge = this.scene.RNG.between(1,2);	//Flips a coin to determine whether the vessel is generated spanning top and bottom, or left and right
 			
 			switch(whichEdge)
 			{
@@ -25,9 +26,9 @@
 
 				
 				coords.SetCoordinates(
-				Phaser.Math.Between(this.boundaryX1,this.boundaryX2), 			//X1
+				this.scene.RNG.between(this.boundaryX1,this.boundaryX2), 			//X1
 				this.boundaryY1, 							//Y1
-				Phaser.Math.Between(this.boundaryX1,this.boundaryX2), 			//X2
+				this.scene.RNG.between(this.boundaryX1,this.boundaryX2), 			//X2
 				this.boundaryY2								//Y2
 				);
 				
@@ -39,9 +40,9 @@
 				
 				coords.SetCoordinates( 											
 				this.boundaryX1,							//X1
-				Phaser.Math.Between(this.boundaryY1,this.boundaryY2),			//Y1
+				this.scene.RNG.between(this.boundaryY1,this.boundaryY2),			//Y1
 				this.boundaryX2,							//X2
-				Phaser.Math.Between(this.boundaryY1,this.boundaryY2)			//Y2
+				this.scene.RNG.between(this.boundaryY1,this.boundaryY2)			//Y2
 				);
 				
 				break;

@@ -101,6 +101,7 @@ class level
       },
       body: JSON.stringify({
 	      "sessionID" : levelDict["sessionID"], 
+	      "seed" : levelDict["seed"],
 	      "number" : levelDict["number"], 
 	      "intersections" : levelDict["intersections"],
 	      "FOV": levelDict["FOV"],
