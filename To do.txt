@@ -1,3 +1,0 @@
-Introduce some sort of score thing
-
-Write instructions for the game and display them somewhere
