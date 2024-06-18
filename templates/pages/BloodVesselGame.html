@@ -71,8 +71,9 @@
 		this.load.script('s_LevelRecord','/static/assets/scripts/levelRecord.js');
 		this.load.script('s_Level','/static/assets/scripts/level.js');
 		this.load.script('s_WriteManager','/static/assets/scripts/writeManager.js');
-		this.load.script('s_IdleTracker','/static/assets/scripts/IdleTracker.js')
-		this.load.script('s_RNGManager','/static/assets/scripts/rngManager.js')
+		this.load.script('s_IdleTracker','/static/assets/scripts/IdleTracker.js');
+		this.load.script('s_RNGManager','/static/assets/scripts/rngManager.js');
+		this.load.script('s_TransitionManager','/static/assets/scripts/TransitionManager.js');
 
 	}
 	
@@ -91,7 +92,7 @@
 		this.RNGManager.Reset(seedOverride)	//like I said, remember to do this every time a new seed is introduced
 		
 		console.log("session ID : " + this.sessionID)		
-		
+
 		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICS
 		this.vesselGraphics = this.add.graphics(w/2,h/2);			//graphics layer for the blood vessels
 		this.lineGraphics = this.add.graphics(w/2,h/2)				//graphics layer for the cutting head's lines
@@ -108,6 +109,8 @@
 		this.timer = new levelTimer(this,clockTick)														//new clock which updates every 500 ms
 		this.cutCursor = new cutHead(this,5,5,this.width,this.height); 									//places cursor at your mouse position to begin the game		
 		console.log(this.levelParams)
+				
+		this.transitionManager = new TransitionManager(this);
 		
 		this.level = new level(this);																	//holds all the info on a particular level (setup and records)
 				
@@ -145,15 +148,21 @@
 		{
 			this.RNGManager.Reset();	//gets new seed
 			this.level.recordResults();
-			this.levelParams = new levelParams(this.RNG.between(dmin,dmax),this.RNG.between(cmin*10,cmax*10)/10)
+			this.levelParams = new levelParams(this.RNG.between(dmin,dmax),this.RNG.between(cmin*10,cmax*10)/10);
 			this.level.generate();
 			this.cutCursor.vessels = this.level.bloodVessels;
+			this.transitionManager.Begin("transition")	//congratulates player and pauses the game until they press 'P'
 
 		}
 
 		this.camera.UpdatePosition();
-		this.cutCursor.ListenForKeys();
-		this.cutCursor.ListenForMouse();
+		
+		if (this.transitionManager.active == false) //ensures cursor can't move while paused
+		{
+			this.cutCursor.ListenForKeys();
+			this.cutCursor.ListenForMouse();
+		}
+		
 		this.timerText.setText("Time Elapsed: " + this.timer.GetLevelTime());
 		this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
 		this.fovText.setText("Camera size: " + this.level.levelRecord.fov);
