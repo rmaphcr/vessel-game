@@ -29,6 +29,11 @@ class levelTimer
 		this.scene.idleTracker.increment((this.interval)/1000)
 	}
 	
+	SessionPenalty()
+	{
+		this.sessionTime += (mistakePenalty) * (this.interval/1000)
+	}
+	
 	Reset()
 	{
 		this.levelTime = 0;

@@ -132,6 +132,7 @@ class bloodVessel
 			{
 				console.log("This was not the target blood vessel.")
 				this.scene.level.levelRecord.incrementMistakes();
+				this.scene.timer.SessionPenalty();
 			}
 
 		}
