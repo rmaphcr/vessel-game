@@ -36,6 +36,7 @@ class Camera
 			this.circle.setPosition(game.input.mousePointer.worldX,game.input.mousePointer.worldY)
 			this.circle.radius = this.size * ((this.scene.width)/2);
 			this.circle.setOrigin(0,0)
+			this.scene.level.levelRecord.getFOV();
 		}
 		
 		Resize(newSize)	//changes camera size

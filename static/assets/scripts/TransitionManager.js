@@ -22,6 +22,7 @@ class TransitionManager
 		this.continueText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the 'P' key to continue.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.continueText.setOrigin(0.5);
 		this.continueText.setDepth(1002);	
+
 	}
 	
 	Activate()
@@ -36,6 +37,7 @@ class TransitionManager
 		
 		else
 		{
+			//change this once countdown timer is implemented, so this will not do anything if countdown is at 0.
 			this.End();
 		}
 	}
@@ -52,15 +54,24 @@ class TransitionManager
 		
 		this.scene.timer.Pause();
 		this.blocker.setVisible(true);
-		this.continueText.setVisible(true);
 		
 		if (mode == "transition")
 		{
+			this.continueText.setVisible(true);
 			this.transitionText.setVisible(true);
 		} 
 		
+		else if (mode == "end")
+		{
+			this.gameOverText = this.scene.add.text((this.scene.width)/2, (h/2), ["GAME OVER","","You completed " + (this.scene.level.levelRecord.number - 1).toString() + " levels.","Thank you for playing!"], { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });		
+			this.gameOverText.setOrigin(0.5);
+			this.gameOverText.setDepth(1002);	
+			this.gameOverText.setAlign("center");
+		}
+		
 		else
 		{
+			this.continueText.setVisible(true);
 			this.pauseText.setVisible(true);
 		}
 		

@@ -3,6 +3,7 @@ class cutHead
 	
 	//This class implements the cutting head.
 	//manages controls for both the cut head and pointers.
+	//the cursor goes on top of the scene blocker and can't go off the screen edges, so it doesn't get lost.
 	
 	constructor(scene,size,speed,x_max,y_max)
 	{
@@ -15,7 +16,8 @@ class cutHead
 		
 		this.keyManager = this.scene.keyManager;	//the key manager responsible for handling this cut head
 	
-		this.object = this.scene.add.circle(game.input.mousePointer.x,game.input.mousePointer.y,this.size,'0xffffff'); //the game object associated with this cutting head
+		this.object = this.scene.add.circle(this.scene.width/2,this.scene.height/2,this.size,'0xffffff'); //the game object associated with this cutting head
+		this.object.setDepth(1000);	//places cutting circle in front of the blocker, so you don't lose your cursor
 		
 		this.speed = speed;	//the speed (in pixels per frame) which the cutting head moves at when a button is held down
 		
@@ -50,14 +52,9 @@ class cutHead
 	
 	ResetPosition() 
 	{
-		if (game.input.mousePointer.x <= this.scene.w)
-		{
-			this.object.setPosition(game.input.mousePointer.x, game.input.mousePointer.y);	//resets location of the cut head to the mouse pointer
-		}
-		else
-		{
-			this.object.setPosition(this.scene.w,game.input.mousePointer.y) 				//ensures cursor can't reset onto UI panel
-		}
+		//puts the cursor in the middle of the play area
+		this.object.setPosition(this.scene.width/2, this.scene.height/2);
+		
 	}
 	
 	ListenForMouse()	//listens for mouse input
@@ -101,28 +98,28 @@ class cutHead
 	
 	{
 			
-		if((this.keyManager.arrows.left.isDown||this.keyManager.A.isDown) && this.object.x >= this.speed) //Move left
+		if((this.keyManager.arrows.left.isDown||this.keyManager.A.isDown) && (this.object.x - this.size) >= this.speed) //Move left
 		{
 			this.object.x -= this.speed; 
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
 		}
 			
-		else if((this.keyManager.arrows.right.isDown||this.keyManager.D.isDown) && this.object.x <= this.x_max-this.speed) //Move right
+		else if((this.keyManager.arrows.right.isDown||this.keyManager.D.isDown) && (this.object.x + this.size) <= this.x_max-this.speed) //Move right
 		{
 			this.object.x += this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
 		}
 		
-		if((this.keyManager.arrows.up.isDown||this.keyManager.W.isDown) && this.object.y >= this.speed) //Move up
+		if((this.keyManager.arrows.up.isDown||this.keyManager.W.isDown) && (this.object.y - this.size) >= this.speed) //Move up
 		{
 			this.object.y -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
 		}
 			
-		else if((this.keyManager.arrows.down.isDown||this.keyManager.S.isDown) && this.object.y <= this.y_max-this.speed) //Move down
+		else if((this.keyManager.arrows.down.isDown||this.keyManager.S.isDown) && (this.object.y + this.size) <= this.y_max-this.speed) //Move down
 		{
 			this.object.y += this.speed;
 			this.scene.levelMotionTotal += this.speed;

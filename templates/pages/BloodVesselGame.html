@@ -109,31 +109,27 @@
 		this.timer = new levelTimer(this,clockTick)														//new clock which updates every 500 ms
 		this.cutCursor = new cutHead(this,5,5,this.width,this.height); 									//places cursor at your mouse position to begin the game		
 		console.log(this.levelParams)
-				
-		this.transitionManager = new TransitionManager(this);
 		
 		this.level = new level(this);																	//holds all the info on a particular level (setup and records)
+		this.transitionManager = new TransitionManager(this);
 				
 		this.camera = new Camera(this,this.levelParams.camSize,false)											//Camera. Currently broken- camera circle isn't following mouse coordinates.
 				this.cameraMask = new Phaser.Display.Masks.BitmapMask(this,this.camera.circle)					//Mask. 
 				this.cameraMask.invertAlpha = true;
 		this.screenBlocker = this.add.rectangle(this.width/2, this.height/2, this.width, this.height, 0x000000);				
-				this.screenBlocker.setDepth(1000); //keeps rectangle in front of everything
+				this.screenBlocker.setDepth(999); //keeps rectangle in front of everything except cutting head and transition screens
 				this.screenBlocker.setMask(this.cameraMask);
 				if (noBlocker == true)
 				{
 						this.screenBlocker.setVisible(false); //debug, reveals whole screen if noBlocker is true in globals
 				}
 		
-		this.timerText = this.add.text(this.width + 10, h/3, "Time Elapsed: " + this.timer.GetLevelTime(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
-		this.mistakeText = this.add.text(this.width + 10, h/2, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
-		this.fovText = this.add.text(this.width + 10, (2*h)/3, "Camera size: " + this.levelParams.camSize, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
+		this.timerText = this.add.text(this.width + 10, h/5, "Time Left: " + this.timer.GetTimeLeft(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
+		this.mistakeText = this.add.text(this.width + 10, 2*h/5, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
+		this.fovText = this.add.text(this.width + 10, 3*h/5, "Camera size: " + this.camera.size, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
+		this.levelText = this.add.text(this.width + 10, 4*h/5,["Levels" , "completed: " + (this.level.levelRecord.number - 1)],  {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }, align = "center");
 
 		this.idleTracker = new idleTracker(this); //tracks how long the mouse and keys have been idle.
-
-			//mouse input events
-			
-
 
 		//STARTING THE GAME
 
@@ -144,28 +140,37 @@
 
 	function update()
 	{
-		if (this.level.levelRecord.completed == true && noEnd == false)
+		
+		if (this.timer.GetTimeLeft() <= 0 && this.transitionManager.active == false && noGameOver == false) //game over 
+		{
+			this.timerText.setText("Time Left: " + 0);
+			this.transitionManager.Begin("end")
+		}
+		
+		if (this.level.levelRecord.completed == true && noEnd == false && this.transitionManager.active == false) // level transition
 		{
 			this.RNGManager.Reset();	//gets new seed
 			this.level.recordResults();
 			this.levelParams = new levelParams(this.RNG.between(dmin,dmax),this.RNG.between(cmin*10,cmax*10)/10);
 			this.level.generate();
 			this.cutCursor.vessels = this.level.bloodVessels;
+			this.fovText.setText("Camera size: " + this.camera.size);
+			this.levelText.setText(["Levels" , "completed: " + (this.level.levelRecord.number - 1)])
 			this.transitionManager.Begin("transition")	//congratulates player and pauses the game until they press 'P'
 
 		}
 
 		this.camera.UpdatePosition();
 		
-		if (this.transitionManager.active == false) //ensures cursor can't move while paused
+		if (this.transitionManager.active == false) //movement and game updates
 		{
 			this.cutCursor.ListenForKeys();
 			this.cutCursor.ListenForMouse();
+
+			this.timerText.setText("Time Left: " + Phaser.Math.RoundTo(this.timer.GetTimeLeft(),0));
+			this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
+
 		}
-		
-		this.timerText.setText("Time Elapsed: " + this.timer.GetLevelTime());
-		this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
-		this.fovText.setText("Camera size: " + this.level.levelRecord.fov);
 	}
 		
 

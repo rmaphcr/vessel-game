@@ -14,6 +14,7 @@
 	
 	//TIMER SETTINGS
 	let clockTick = 500; 				//how often to update clock (in ms)
+	let timeLimit = 300;				//time limit for entire game (in seconds)
 	let idleFlagTime = 5; 				//how many seconds of inactivity before triggering the idle flag for the current level
 	//
 	
@@ -35,4 +36,5 @@
 	let seedOverride = false;				//if this is a string, it'll be used instead of a random one for the first level's seed. Can be used to view levels.
 	let noBlocker = false;					//if this is true, the full scene will be revealed, rather than through an aperture
 	let noEnd = false;						//if this is true, the level will never move on.
+	let noGameOver = false;					//if this is true, game over will never trigger.
 	//
