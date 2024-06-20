@@ -144,20 +144,12 @@
 		if (this.timer.GetTimeLeft() <= 0 && this.transitionManager.active == false && noGameOver == false) //game over 
 		{
 			this.timerText.setText("Time Left: " + 0);
-			this.transitionManager.Begin("end")
+			this.transitionManager.Begin("end");
 		}
 		
-		if (this.level.levelRecord.completed == true && noEnd == false && this.transitionManager.active == false) // level transition
+		else if (this.level.levelRecord.completed == true && noEnd == false && this.transitionManager.active == false) // level transition
 		{
-			this.RNGManager.Reset();	//gets new seed
-			this.level.recordResults();
-			this.levelParams = new levelParams(this.RNG.between(dmin,dmax),this.RNG.between(cmin*10,cmax*10)/10);
-			this.level.generate();
-			this.cutCursor.vessels = this.level.bloodVessels;
-			this.fovText.setText("Camera size: " + this.camera.size);
-			this.levelText.setText(["Levels" , "completed: " + (this.level.levelRecord.number - 1)])
-			this.transitionManager.Begin("transition")	//congratulates player and pauses the game until they press 'P'
-
+			this.transitionManager.Transition();
 		}
 
 		this.camera.UpdatePosition();

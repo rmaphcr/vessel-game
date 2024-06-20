@@ -51,11 +51,18 @@ class level
 		this.levelRecord.getFOV();
 	}
 	
-	recordResults()
+	recordResults(trash = false)
 	{
 		//saves data to the level record and exports it, then resets level record
 		
 		//COUNT VESSELS FOR THE LEVEL RECORD
+		
+		if (trash == true || alwaysTrash == true) //doesn't export the level details. Just resets and moves on.
+		{
+			this.levelRecord.reset();
+			this.scene.levelMotionTotal = 0;
+			return false
+		}
 		
 		{
 			this.countVessels();

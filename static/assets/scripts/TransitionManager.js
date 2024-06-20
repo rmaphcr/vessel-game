@@ -22,6 +22,12 @@ class TransitionManager
 		this.continueText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the 'P' key to continue.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.continueText.setOrigin(0.5);
 		this.continueText.setDepth(1002);	
+		
+		this.restartText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the 'P' key to restart the game.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
+		this.restartText.setOrigin(0.5);
+		this.restartText.setDepth(1002);	
+
+		this.gameOver = false; //becomes true when the game is restarting
 
 	}
 	
@@ -35,10 +41,14 @@ class TransitionManager
 			this.Begin();
 		}
 		
-		else
+		else if (this.gameOver == false) 
 		{
-			//change this once countdown timer is implemented, so this will not do anything if countdown is at 0.
 			this.End();
+		}
+		
+		else  //if the game is over
+		{
+			this.RestartGame();
 		}
 	}
 	
@@ -63,10 +73,12 @@ class TransitionManager
 		
 		else if (mode == "end")
 		{
+			this.gameOver = true;
 			this.gameOverText = this.scene.add.text((this.scene.width)/2, (h/2), ["GAME OVER","","You completed " + (this.scene.level.levelRecord.number - 1).toString() + " levels.","Thank you for playing!"], { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });		
 			this.gameOverText.setOrigin(0.5);
 			this.gameOverText.setDepth(1002);	
 			this.gameOverText.setAlign("center");
+			this.restartText.setVisible(true);
 		}
 		
 		else
@@ -91,4 +103,32 @@ class TransitionManager
 		this.scene.timer.Unpause();
 		this.active = false;
 	}
+	
+	Transition(newGame = false)
+	{
+		//manages all the junk involved in setting up a new level
+		this.scene.RNGManager.Reset();	//gets new seed
+		this.scene.level.recordResults(newGame);
+		this.scene.levelParams = new levelParams(this.scene.RNG.between(dmin,dmax),this.scene.RNG.between(cmin*10,cmax*10)/10);
+		this.scene.level.generate();
+		this.scene.cutCursor.vessels = this.scene.level.bloodVessels;
+		this.scene.fovText.setText("Camera size: " + this.scene.camera.size);
+		this.scene.levelText.setText(["Levels" , "completed: " + (this.scene.level.levelRecord.number - 1)])
+		if (newGame == false) {this.Begin("transition")};	//congratulates player and pauses the game until they press 'P'
+	}
+	
+	RestartGame()
+	{
+		console.log("restarting game");
+		//sets everything back to initial state so game can be restarted.
+		this.gameOverText.setVisible(false);
+		this.restartText.setVisible(false);
+		this.scene.transitionManager.Transition(true); //dumps last level.
+		this.scene.timer.sessionTime = 0;
+		this.scene.level.levelRecord.number = 1;	//sets level number back to 1.
+		this.scene.levelText.setText(["Levels" , "completed: " + (this.scene.level.levelRecord.number - 1)])
+		this.gameOver = false;
+		this.End()		//ends pause
+	}
+	
 }
