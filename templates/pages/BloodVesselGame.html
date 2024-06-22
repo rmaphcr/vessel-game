@@ -104,9 +104,9 @@
 		this.levelMotionTotal = 0; 									//tracks total cursor motion in a level. Move this somewhere else?	
 		this.levelMouseMotionTotal = 0;								//tracks total mouse motion in a level. 
 
-		this.keyManager = new KeyManager(this);															//keeps track of key presses				//MECHANICS
+		this.keyManager = new KeyManager(this);													//keeps track of key presses				//MECHANICS
 		this.levelParams = new levelParams(this.RNG.between(dmin,dmax),this.RNG.between(cmin*10,cmax*10)/10);	//parameters for generating the first level
-		this.timer = new levelTimer(this,clockTick)														//new clock which updates every 500 ms
+		this.timer = new levelTimer(this,clockTick);														//new clock which updates every 500 ms
 		this.cutCursor = new cutHead(this,5,5,this.width,this.height); 									//places cursor at your mouse position to begin the game		
 		console.log(this.levelParams)
 		
@@ -127,7 +127,8 @@
 		this.timerText = this.add.text(this.width + 10, h/5, "Time Left: " + this.timer.GetTimeLeft(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
 		this.mistakeText = this.add.text(this.width + 10, 2*h/5, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
 		this.fovText = this.add.text(this.width + 10, 3*h/5, "Camera size: " + this.camera.size, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
-		this.levelText = this.add.text(this.width + 10, 4*h/5,["Levels" , "completed: " + (this.level.levelRecord.number - 1)],  {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }, align = "center");
+		this.levelText = this.add.text(this.width + 10, 4*h/5,["Levels" , "completed: " + (this.level.levelRecord.number - 1)],  {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', align : "center"});
+		this.penaltyMarker = this.add.text(this.timerText.x, this.timerText.y + 20, "-" + (mistakePenalty*clockTick)/1000,{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color:'#ff0000'}).setVisible(false) //shows penalty number on UI panel
 
 		this.idleTracker = new idleTracker(this); //tracks how long the mouse and keys have been idle.
 

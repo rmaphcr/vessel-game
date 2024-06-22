@@ -19,6 +19,14 @@ class cutHead
 		this.object = this.scene.add.circle(this.scene.width/2,this.scene.height/2,this.size,'0xffffff'); //the game object associated with this cutting head
 		this.object.setDepth(1000);	//places cutting circle in front of the blocker, so you don't lose your cursor
 		
+		this.line = new Phaser.Geom.Line(0,0,this.object.x,this.object.y,this.object.x,this.object.y); //initiates cut line. The coordinates will update during clicking
+	
+		this.penaltyText = this.scene.add.text(this.object.x, this.object.y - 10, "-" + ((mistakePenalty*clockTick)/1000).toString() , {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color: '#ff0000',fontSize: 30}).setVisible(false);
+		this.penaltyText.setDepth(1000)
+		this.penaltyText.setOrigin(0.5); //this text appears for a moment when the player makes a mistake
+		
+		this.penaltyActive = false; //whether the penalty text is currently visible
+		
 		this.speed = speed;	//the speed (in pixels per frame) which the cutting head moves at when a button is held down
 		
 		this.x_max = x_max;	//maximum x coordinate allowed for the cut head
@@ -28,8 +36,6 @@ class cutHead
 		this.leftClicking = false; //tracks whether the left mouse button is currently being held down. Used to determine when a click has occurred. 
 		
 		this.ResetPosition(); //starts the cuthead cursor at the mouse location
-		
-		this.line = new Phaser.Geom.Line(0,0,this.object.x,this.object.y,this.object.x,this.object.y); //initiates cut line. The coordinates will update during clicking
 	
 		this.scene.input.on('pointermove', function (pointer)
         {
@@ -54,6 +60,7 @@ class cutHead
 	{
 		//puts the cursor in the middle of the play area
 		this.object.setPosition(this.scene.width/2, this.scene.height/2);
+		this.penaltyText.setPosition(this.scene.width/2, this.scene.height/2);
 		
 	}
 	
@@ -101,6 +108,7 @@ class cutHead
 		if((this.keyManager.arrows.left.isDown||this.keyManager.A.isDown) && (this.object.x - this.size) >= this.speed) //Move left
 		{
 			this.object.x -= this.speed; 
+			this.penaltyText.x -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
 		}
@@ -108,6 +116,7 @@ class cutHead
 		else if((this.keyManager.arrows.right.isDown||this.keyManager.D.isDown) && (this.object.x + this.size) <= this.x_max-this.speed) //Move right
 		{
 			this.object.x += this.speed;
+			this.penaltyText.x += this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
 		}
@@ -115,6 +124,7 @@ class cutHead
 		if((this.keyManager.arrows.up.isDown||this.keyManager.W.isDown) && (this.object.y - this.size) >= this.speed) //Move up
 		{
 			this.object.y -= this.speed;
+			this.penaltyText.y -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
 		}
@@ -122,6 +132,7 @@ class cutHead
 		else if((this.keyManager.arrows.down.isDown||this.keyManager.S.isDown) && (this.object.y + this.size) <= this.y_max-this.speed) //Move down
 		{
 			this.object.y += this.speed;
+			this.penaltyText.y += this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
 		}
@@ -179,6 +190,46 @@ class cutHead
 		this.graphics.strokePath();
 	}
 	
+	HidePenalty()
+	{
+		this.scene.penaltyMarker.setVisible(false);
+		this.penaltyText.setVisible(false);
+		this.penaltyActive = false;
+	}
+	
+	PenaltyFloatUp()
+	{
+		this.penaltyText.y -= 1;
+		this.penaltyText.size += 1;
+	}
+	
+	ShowPenalty()
+	{
+		
+		this.penaltyText.setPosition(this.object.x,this.object.y)
+		
+		if (this.penaltyActive == false);
+		{
+			this.scene.penaltyMarker.setVisible(true);
+			this.penaltyText.setVisible(true);
+			this.penaltyActive = true;
+		
+			this.scene.timer.clock.addEvent({
+			delay:500,
+			loop:false,
+			callback:this.HidePenalty,
+			callbackScope:this
+			});
+
+			this.scene.timer.clock.addEvent({
+			delay:5,
+			repeat:100,
+			callback:this.PenaltyFloatUp,
+			callbackScope:this
+			});
+		}
+	}
+	
 	InitiateCutLine()//method which takes the cut head's current cutting line, and checks its intersection with all blood vessels in the scene.
 	
 	{
@@ -186,7 +237,6 @@ class cutHead
 		//console.log("initiating cutting for cut line between:")
 		//console.log("(x: " + this.line.x1 + ",y: " + this.line.y1 + ") AND ")
 		//console.log("(x: " + this.line.x2 + ",y: " + this.line.y2 + ")")
-		
 		//console.log(this.scene.level.bloodVessels)
 		
 		for (var i = 0;i < this.scene.level.bloodVessels.length;i++) //for each blood vessel in the scene
