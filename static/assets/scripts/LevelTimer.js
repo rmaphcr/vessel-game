@@ -8,7 +8,7 @@ class levelTimer
 		this.levelTime = 0;	//current level time
 		this.sessionTime = 0; //current session time (how long player has been playing overall)
 		this.interval = updateInterval;
-		this.scene = scene
+		this.scene = scene;
 		
 		this.clock.addEvent({
 		delay:this.interval,
@@ -24,13 +24,18 @@ class levelTimer
 	
 	IncrementLevelTime()
 	{
+		
 		this.levelTime += (this.interval)/1000;
+		if (this.scene.level.levelRecord.number > tutLevels)
+		{
 		this.sessionTime += (this.interval)/1000;
+		}
 		this.scene.idleTracker.increment((this.interval)/1000)
 	}
 	
 	SessionPenalty()
 	{
+		if (this.scene.level.levelRecord.number > tutLevels)
 		this.sessionTime += (mistakePenalty) * (this.interval/1000)
 	}
 	

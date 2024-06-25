@@ -132,10 +132,12 @@
 
 		this.idleTracker = new idleTracker(this); //tracks how long the mouse and keys have been idle.
 
+		this.ignoreMistakes = true; //whether mistakes should carry a time penalty. Off to begin with.
+
 		//STARTING THE GAME
 
-		this.level.generate(this.testParams);	//all the creation stuff should be in here
-
+		this.level.generate(this.testParams);	//all the creation stuff should be in here.
+		this.transitionManager.Begin(mode = "opening");
 		
 	}
 
