@@ -15,7 +15,8 @@ class levelRecord
 		this.s = scene;
 		this.sessionID = scene.sessionID;
 		this.seed = scene.RNGManager.lastSeed;
-		this.number = number;
+		this.number = number; //number of levels beaten in this run;
+		this.cumulativeNumber = number;
 		this.mistakenCuts = 0;
 		this.completed = false;
 		this.currentTime = 0; 	//this changes to match the timer when the level ends
@@ -74,6 +75,7 @@ class levelRecord
 		this.completed = false;
 		this.seed = this.s.RNGManager.lastSeed;
 		this.number += 1;
+		this.cumulativeNumber += 1;
 		this.mistakenCuts = 0;
 		this.currentTime = 0;
 		this.intersections = 0;
@@ -86,7 +88,7 @@ class levelRecord
 	
 	createJSONdict()
 	{
-		var levelDict = {"sessionID" : this.sessionID, "seed" : this.seed, "number" : this.number, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion, "mouseMotion" : this.mouseMotion, "idleFlag" : this.idleFlag };
+		var levelDict = {"sessionID" : this.sessionID, "seed" : this.seed, "number" : this.number, "cumulativeNumber":this.cumulativeNumber, "mistakes" : this.mistakenCuts, "time" : this.currentTime, "intersections" : this.intersections, "FOV" : this.fov, "vessels" : this.vesselCount, "motion" : this.totalMotion, "mouseMotion" : this.mouseMotion, "idleFlag" : this.idleFlag };
 		
 		return levelDict;
 	}

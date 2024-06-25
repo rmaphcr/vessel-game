@@ -38,24 +38,8 @@ def dbwrite():
 	#No error checking (yet) so just make sure you catch rubbish before it gets here
 
     jsonString = json.dumps(request.json)
-    resultJson = json.loads(jsonString)
-    
-    print(resultJson)
-
-    dbDict = {
-             'session ID' : resultJson.get('sessionID'),
-             'seed' : resultJson.get('seed'),
-             'number' : resultJson.get('number'),
-             'mistakes' : resultJson.get('mistakes'),
-             'time' : resultJson.get('time'),
-             'intersections' : resultJson.get('intersections'),
-             'vessels' : resultJson.get('vessels'),
-             'motion': resultJson.get('motion'),
-             'mouseMotion': resultJson.get('mouseMotion'),
-             'FOV' : resultJson.get('FOV'),
-             'idleFlag': resultJson.get('idleFlag')
-             }
-    
+    dbDict = json.loads(jsonString)
+    print(dbDict)
     ref = db.collection("results").add(dbDict) 
     respDict = {"wrote":True} #Just sends a token response back to the frontend to keep it happy
     return jsonify(respDict)

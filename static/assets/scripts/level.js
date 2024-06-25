@@ -110,6 +110,7 @@ class level
 	      "sessionID" : levelDict["sessionID"], 
 	      "seed" : levelDict["seed"],
 	      "number" : levelDict["number"], 
+	      "cumulativeNumber" : levelDict["cumulativeNumber"],
 	      "intersections" : levelDict["intersections"],
 	      "FOV": levelDict["FOV"],
 	      "vessels" : levelDict["vessels"],
