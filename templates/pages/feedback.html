@@ -25,6 +25,20 @@ You are not required to answer everything. </p>
 <br>
 
 <form action="{{ url_for('dbfeedback')}}" method="post">
+	
+	<fieldset>
+		<legend> Do you play video games regularly? </legend>
+		<div>
+			<input type="radio" id="GamerYes" name="GamerGroup" value="Yes" />
+			<label for="LaparoFieldYes">Yes</label>
+
+			<input type="radio" id="GamerNo" name="GamerGroup" value="No" />
+			<label for="LaparoFieldNo">No</label>
+		</div>
+	</fieldset>
+
+<br>
+	
 	<fieldset>
 		<legend> What do you know about laparoscopic (keyhole) surgery? </legend>
 		<div>
@@ -64,21 +78,6 @@ You are not required to answer everything. </p>
  
 <br>
  
-  <fieldset>
-    <legend>Did you think the game was clinically relevant?</legend>
-    <div>
-		
-      <input type="radio" id="LaparoRelevantYes" name="LaparRelevantGroup" value="Yes" />
-      <label for="LaparoRelevantYes">Yes</label>
-
-      <input type="radio" id="LaparoRelevantNo" name="LaparoRelevantGroup" value="No" />
-      <label for="LaparoRelevantNo">No</label>
-
-    </div>
-  </fieldset>
-
-<br>
-
   <fieldset>
     <legend>Did you think the game was clinically relevant?</legend>
     <div>
