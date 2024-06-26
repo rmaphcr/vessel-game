@@ -1,0 +1,1 @@
+-UI panel: camera size sometimes says '0' when it's clearly not. This problem doesn't extend to the levelRecord export. I have no idea where this bug comes from.
