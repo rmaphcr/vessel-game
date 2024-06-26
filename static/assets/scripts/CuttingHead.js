@@ -21,6 +21,9 @@ class cutHead
 		
 		this.line = new Phaser.Geom.Line(0,0,this.object.x,this.object.y,this.object.x,this.object.y); //initiates cut line. The coordinates will update during clicking
 	
+		this.scissorsOpen = this.scene.scissorsOpen;
+		this.scissorsClosed = this.scene.scissorsClosed;
+		
 		this.penaltyText = this.scene.add.text(this.object.x, this.object.y - 10, "-" + ((mistakePenalty*clockTick)/1000).toString() , {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color: '#ff0000',fontSize: 30}).setVisible(false);
 		this.penaltyText.setDepth(1000)
 		this.penaltyText.setOrigin(0.5); //this text appears for a moment when the player makes a mistake
@@ -48,12 +51,18 @@ class cutHead
 	
 	GoWhite()
 	{
+		//when not cutting
 		this.object.fillColor = '0xffffff';
+		this.scissorsClosed.setVisible(true);
+		this.scissorsOpen.setVisible(false);
 	}
 	
 	GoBlue()
 	{
+		//when cutting
 		this.object.fillColor = '0x00c9ff';
+		this.scissorsClosed.setVisible(false);
+		this.scissorsOpen.setVisible(true);
 	}
 	
 	ResetPosition() 
@@ -62,6 +71,14 @@ class cutHead
 		this.object.setPosition(this.scene.width/2, this.scene.height/2);
 		this.penaltyText.setPosition(this.scene.width/2, this.scene.height/2);
 		
+	}
+	
+	MoveScissors()
+	{
+		//moves the scissors over to the object. 
+		
+		this.scissorsOpen.setPosition(this.object.x - 25,this.object.y + 25);
+		this.scissorsClosed.setPosition(this.object.x - 25,this.object.y + 25);
 	}
 	
 	ListenForMouse()	//listens for mouse input
@@ -111,6 +128,7 @@ class cutHead
 			this.penaltyText.x -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
+			this.MoveScissors();
 		}
 			
 		else if((this.keyManager.arrows.right.isDown||this.keyManager.D.isDown) && (this.object.x + this.size) <= this.x_max-this.speed) //Move right
@@ -119,6 +137,7 @@ class cutHead
 			this.penaltyText.x += this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
+			this.MoveScissors();
 		}
 		
 		if((this.keyManager.arrows.up.isDown||this.keyManager.W.isDown) && (this.object.y - this.size) >= this.speed) //Move up
@@ -127,6 +146,7 @@ class cutHead
 			this.penaltyText.y -= this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
+			this.MoveScissors();
 		}
 			
 		else if((this.keyManager.arrows.down.isDown||this.keyManager.S.isDown) && (this.object.y + this.size) <= this.y_max-this.speed) //Move down
@@ -135,6 +155,7 @@ class cutHead
 			this.penaltyText.y += this.speed;
 			this.scene.levelMotionTotal += this.speed;
 			this.scene.idleTracker.reset(); 
+			this.MoveScissors();
 		}
 						
 		

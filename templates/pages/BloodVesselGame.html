@@ -54,6 +54,8 @@
 		
 		//loading permanent graphics assets
 		this.load.image('blood', '/static/assets/images/blood.jpg');
+		this.load.image('scissorsopen','/static/assets/images/scissorsopen.png');
+		this.load.image('scissorsclosed','/static/assets/images/scissorsclosed.png');
 		
 		//loading global variables
 		this.load.script('s_globals','/static/assets/scripts/Globals.js');
@@ -94,6 +96,8 @@
 		console.log("session ID : " + this.sessionID)		
 
 		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICS
+		this.scissorsOpen = this.add.image(w/2 - 25,h/2 + 25,'scissorsopen').setVisible(false);
+		this.scissorsClosed = this.add.image(w/2 - 25,h/2 + 25,'scissorsclosed')
 		this.vesselGraphics = this.add.graphics(w/2,h/2);			//graphics layer for the blood vessels
 		this.lineGraphics = this.add.graphics(w/2,h/2)				//graphics layer for the cutting head's lines
 				this.lineGraphics.lineStyle(5, '0x00c9ff', 1.0);
