@@ -6,7 +6,7 @@ class TransitionManager
 	{
 		this.scene = scene;
 		this.active = false; //tells the game whether it's currently paused or not. Game begins paused.
-		this.scene.keyManager.P.on('up',this.Activate,this) //starts listening for presses of 'P'
+		this.scene.keyManager.Space.on('up',this.Activate,this) //starts listening for presses of the spacebar
 		
 		this.blocker = scene.add.rectangle((this.scene.width)/2, this.scene.height/2, this.scene.width, this.scene.height, 0x000000).setVisible(false);
 		this.blocker.setDepth(1001);
@@ -19,11 +19,11 @@ class TransitionManager
 		this.transitionText.setDepth(1002);
 		this.transitionText.setOrigin(0.5);	
 		
-		this.continueText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the 'P' key to continue.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
+		this.continueText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the spacebar to continue.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.continueText.setOrigin(0.5);
 		this.continueText.setDepth(1002);	
 		
-		this.restartText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the 'P' key to restart the game.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
+		this.restartText = scene.add.text((this.scene.width)/2, 2*(h/3), "HOLD AND RELEASE the spacebar to restart the game.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.restartText.setOrigin(0.5);
 		this.restartText.setDepth(1002);
 		
@@ -31,7 +31,7 @@ class TransitionManager
 		this.openingText.setDepth(1002);
 		this.openingText.setOrigin(0.5);
 		
-		this.beginText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the 'P' key to begin playing!", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
+		this.beginText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the spacebar to begin playing!", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.beginText.setOrigin(0.5);
 		this.beginText.setDepth(1002);		
 		
@@ -58,16 +58,17 @@ class TransitionManager
 			this.End();
 		}
 		
-		else  //if the game is over
+		else
 		{
-			this.RestartGame();
+			this.RestartCheck(); //checks if the space key has been held
 		}
+		
 	}
 	
 	Begin(mode = "pause")
 	{
 		//stops timer, throws up transition screen until continue button pressed
-		//the player can use the p key to pause and unpause at any time as well, but the screen will be hidden
+		//the player can use the spacebar to pause and unpause at any time as well, but the screen will be hidden
 		//called by the Activate() listener responder, or directly when a new level has just been generated
 		
 		console.log("pause initiated");
@@ -115,9 +116,7 @@ class TransitionManager
 	
 	End()
 	{		
-		
-		//resumes the game.
-		
+		{
 		console.log("game resumed");
 		
 		this.blocker.setVisible(false);
@@ -129,6 +128,7 @@ class TransitionManager
 		this.warningText.setVisible(false);
 		this.scene.timer.Unpause();
 		this.active = false;
+		}
 	}
 	
 	Transition(newGame = false)
@@ -143,7 +143,16 @@ class TransitionManager
 		this.scene.levelText.setText(["Levels" , "completed: " + (this.scene.level.levelRecord.number - 1)])
 		if (newGame == false) {this.Begin("transition")};	//congratulates player and pauses the game until they press 'P'
 	}
-	
+
+	RestartCheck()
+	{
+		console.log("duration" + this.scene.keyManager.Space.duration.toString())
+		if (this.scene.keyManager.Space.duration >= 1000) //if space key has been held for long enough
+		{
+			this.RestartGame();
+		}
+	}
+
 	RestartGame()
 	{
 		console.log("restarting game");

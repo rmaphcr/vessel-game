@@ -12,7 +12,7 @@ class KeyManager
 		this.A = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 		this.S = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 		this.D = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-		this.P = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P); //pause
+		this.Space = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); //pause
 	}
 	
 }
