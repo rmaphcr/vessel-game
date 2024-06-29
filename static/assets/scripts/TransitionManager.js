@@ -11,10 +11,6 @@ class TransitionManager
 		this.blocker = scene.add.rectangle((this.scene.width)/2, this.scene.height/2, this.scene.width, this.scene.height, 0x000000).setVisible(false);
 		this.blocker.setDepth(1001);
 		
-		this.pauseText = scene.add.text((this.scene.width)/2, h/2, "PAUSED", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);	
-		this.pauseText.setDepth(1002);		
-		this.pauseText.setOrigin(0.5);
-		
 		this.transitionText = scene.add.text((this.scene.width)/2, h/2, "Good job! Onto the next level!", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.transitionText.setDepth(1002);
 		this.transitionText.setOrigin(0.5);	
@@ -22,6 +18,8 @@ class TransitionManager
 		this.continueText = scene.add.text((this.scene.width)/2, 2*(h/3), "Press the spacebar to continue.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.continueText.setOrigin(0.5);
 		this.continueText.setDepth(1002);	
+		
+		this.pauseScreen = scene.pauseScreen;
 		
 		this.restartText = scene.add.text((this.scene.width)/2, 2*(h/3), "HOLD AND RELEASE the spacebar to restart the game.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setVisible(false);		
 		this.restartText.setOrigin(0.5);
@@ -108,8 +106,7 @@ class TransitionManager
 		
 		else
 		{
-			this.continueText.setVisible(true);
-			this.pauseText.setVisible(true);
+			this.pauseScreen.setVisible(true);
 		}
 		
 	}
@@ -122,8 +119,8 @@ class TransitionManager
 		this.blocker.setVisible(false);
 		this.continueText.setVisible(false);
 		this.transitionText.setVisible(false);
-		this.pauseText.setVisible(false);
 		this.beginText.setVisible(false);
+		this.pauseScreen.setVisible(false);
 		this.openingText.setVisible(false);
 		this.warningText.setVisible(false);
 		this.scene.timer.Unpause();

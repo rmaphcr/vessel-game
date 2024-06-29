@@ -54,6 +54,7 @@
 		
 		//loading permanent graphics assets
 		this.load.image('blood', '/static/assets/images/blood.jpg');
+		this.load.image('pausescreen', '/static/assets/images/pausescreen.png')
 		this.load.image('scissorsopen','/static/assets/images/scissorsopen.png');
 		this.load.image('scissorsclosed','/static/assets/images/scissorsclosed.png');
 		
@@ -95,7 +96,10 @@
 		
 		console.log("session ID : " + this.sessionID)		
 
-		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICS
+		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICSd
+		this.pauseScreen = this.add.image(w/2,h/2,'pausescreen').setVisible(false); //pause screen image
+		this.pauseScreen.setDepth(1002);
+		
 		this.scissorsOpen = this.add.image(w/2 - 25,h/2 + 25,'scissorsopen').setVisible(false);
 		this.scissorsClosed = this.add.image(w/2 - 25,h/2 + 25,'scissorsclosed')
 		this.vesselGraphics = this.add.graphics(w/2,h/2);			//graphics layer for the blood vessels
