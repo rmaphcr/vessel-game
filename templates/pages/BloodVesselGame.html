@@ -57,6 +57,10 @@
 		this.load.image('pausescreen', '/static/assets/images/pausescreen.png')
 		this.load.image('scissorsopen','/static/assets/images/scissorsopen.png');
 		this.load.image('scissorsclosed','/static/assets/images/scissorsclosed.png');
+		this.load.image('Transition','/static/assets/images/Transition.png');
+		this.load.image('Opening','/static/assets/images/Opening.png');
+		this.load.image('GameOver','/static/assets/images/GameOver.png');
+		this.load.image('Spacebar', '/static/assets/images/spacebar.png');
 		
 		//loading global variables
 		this.load.script('s_globals','/static/assets/scripts/Globals.js');
@@ -96,9 +100,19 @@
 		
 		console.log("session ID : " + this.sessionID)		
 
-		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICSd
+		this.backgroundImage = this.add.image(w/2, h/2, 'blood');	//the background image displayed throughout	//GRAPHICS
 		this.pauseScreen = this.add.image(w/2,h/2,'pausescreen').setVisible(false); //pause screen image
 		this.pauseScreen.setDepth(1002);
+		this.gameOverScreen = this.add.image(w/2,h/2,'GameOver').setVisible(false); //pause screen image
+		this.gameOverScreen.setDepth(1002);
+		this.transitionScreen = this.add.image(w/2,h/2,'Transition').setVisible(false); //pause screen image
+		this.transitionScreen.setDepth(1002);
+		this.openingScreen = this.add.image(w/2,h/2,'Opening').setVisible(false); //pause screen image
+		this.openingScreen.setDepth(1002);
+		
+		this.spaceGraphic = this.add.image(w + c/2, h - h/6, 'Spacebar');
+		this.spaceGraphic.setDepth(1002);
+		this.spaceText = this.add.text(w + c/2, h - h/8, ["PAUSE / CONTROLS"], {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:15}).setOrigin(0.5)
 		
 		this.scissorsOpen = this.add.image(w/2 - 25,h/2 + 25,'scissorsopen').setVisible(false);
 		this.scissorsClosed = this.add.image(w/2 - 25,h/2 + 25,'scissorsclosed')
@@ -132,10 +146,11 @@
 						this.screenBlocker.setVisible(false); //debug, reveals whole screen if noBlocker is true in globals
 				}
 		
-		this.timerText = this.add.text(this.width + 10, h/5, "Time Left: " + this.timer.GetTimeLeft(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });			// UI
-		this.mistakeText = this.add.text(this.width + 10, 2*h/5, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
-		this.fovText = this.add.text(this.width + 10, 3*h/5, "Camera size: " + this.camera.size, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });	//
-		this.levelText = this.add.text(this.width + 10, 4*h/5,["Levels" , "completed: " + (this.level.levelRecord.number - 1)],  {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', align : "center"});
+		this.timerText = this.add.text(w + c/2, h/7, "Time Left: " + this.timer.GetTimeLeft(), { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setOrigin(0.5);			// UI
+		this.mistakeText = this.add.text(w + c/2, 2*h/7, "Mistakes: " + this.level.levelRecord.mistakenCuts, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setOrigin(0.5);	//
+		this.fovText = this.add.text(w + c/2, 3*h/7, "Camera size: " + this.camera.size, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setOrigin(0.5);	//
+		this.levelText = this.add.text(w + c/2, 4*h/7,["Levels" , "completed: " + (this.level.levelRecord.number - 1)],  {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', align : "center"}).setOrigin(0.5);
+		this.practiceText = this.add.text(w + c/2, 5*h/7,["PRACTICE" , "LEVEL", "(UNTIMED)"],  {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', align : "center"}).setOrigin(0.5);
 		this.penaltyMarker = this.add.text(this.timerText.x, this.timerText.y + 20, "-" + (mistakePenalty*clockTick)/1000,{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color:'#ff0000'}).setVisible(false) //shows penalty number on UI panel
 
 		this.idleTracker = new idleTracker(this); //tracks how long the mouse and keys have been idle.
@@ -173,6 +188,13 @@
 			this.timerText.setText("Time Left: " + Phaser.Math.RoundTo(this.timer.GetTimeLeft(),0));
 			this.mistakeText.setText("Mistakes: " + this.level.levelRecord.mistakenCuts);
 
+		}
+		
+		if (this.level.levelRecord.number == tutLevels + 1)
+		{
+			//if the real game has started
+			
+			this.practiceText.setText(["COUNTDOWN","STARTED!"])
 		}
 	}
 		

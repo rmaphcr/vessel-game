@@ -40,7 +40,7 @@ def dbwrite():
     jsonString = json.dumps(request.json)
     dbDict = json.loads(jsonString)
     print(dbDict)
-    ref = db.collection("results").add(dbDict) 
+    ref = db.collection("trueResults").add(dbDict) 
     respDict = {"wrote":True} #Just sends a token response back to the frontend to keep it happy
     return jsonify(respDict)
 
@@ -54,7 +54,7 @@ def dbfeedback():
 
     dbDict = request.form.to_dict()
     
-    ref = db.collection("feedback").add(dbDict) 
+    ref = db.collection("trueFeedback").add(dbDict) 
     respDict = {"wrote":True} #Just sends a token response back to the frontend to keep it happy
     return render_template("pages/read_form.html")
 
